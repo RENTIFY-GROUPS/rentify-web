@@ -5,10 +5,11 @@ import ErrorBoundary from './components/ErrorBoundary';
 
 const Home = lazy(() => import('./pages/Home'));
 const Listings = lazy(() => import('./pages/Listings'));
-const Login = lazy(() => import('./pages/Auth/Login'));
-const Register = lazy(() => import('./pages/Auth/Register'));
-const LandlordDashboard = lazy(() => import('./pages/Landlord/Dashboard'));
-const TenantDashboard = lazy(() => import('./pages/Tenant/Dashboard'));
+const Login = lazy(() => import('./pages/auth/Login'));
+const Register = lazy(() => import('./pages/auth/Register'));
+const LandlordDashboard = lazy(() => import('./pages/landlords/Dashboard'));
+const TenantDashboard = lazy(() => import('./pages/tenants/Dashboard'));
+const PropertyDetails = lazy(() => import('./pages/PropertyDetails'));
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/listings" element={<Listings />} />
+            <Route path="/property/:id" element={<PropertyDetails />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/landlord" element={<LandlordDashboard />} />

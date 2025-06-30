@@ -8,6 +8,28 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true },
   role: { type: String, enum: ['landlord', 'tenant'], required: true },
   avatar: { type: String }, // URL to profile image
+
+  // Social Auth
+  googleId: { type: String, unique: true, sparse: true },
+
+  // KYC Documents
+  idDocument: { type: String }, // URL or path to ID document
+  ownershipProof: { type: String }, // URL or path to proof of ownership
+
+  // 2FA
+  twoFactorEnabled: { type: Boolean, default: false },
+  twoFactorSecret: { type: String },
+
+  // Profile fields for landlords
+  portfolio: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Property' }],
+  transactionHistory: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Transaction' }],
+  ratings: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Rating' }],
+
+  // Profile fields for tenants
+  savedSearches: [{ type: String }],
+  favorites: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Property' }],
+  inquiryHistory: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Inquiry' }],
+
   createdAt: { type: Date, default: Date.now }
 });
 

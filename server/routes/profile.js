@@ -19,8 +19,24 @@ router.get('/', auth, async (req, res) => {
   }
 });
 
-// Update user profile including avatar upload
-router.put('/', auth, upload.single('avatar'), [
+const multer = require('multer');
+const path = require('path');
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'server/uploads/');
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname));
+  }
+});
+const uploadMultiple = multer({ storage }).fields([
+  { name: 'avatar', maxCount: 1 },
+  { name: 'idDocument', maxCount: 1 },
+  { name: 'ownershipProof', maxCount: 1 }
+]);
+
+// Update user profile including avatar and KYC document uploads
+router.put('/', auth, uploadMultiple, [
   body('name').optional().trim().notEmpty().withMessage('Name is required'),
   body('email').optional().isEmail().withMessage('Valid email is required'),
   body('phone').optional().isMobilePhone().withMessage('Valid phone number is required'),
@@ -44,8 +60,16 @@ router.put('/', auth, upload.single('avatar'), [
     if (phone) user.phone = phone;
     if (password) user.password = password;
 
-    if (req.file) {
-      user.avatar = `/uploads/${req.file.filename}`;
+    if (req.files) {
+      if (req.files['avatar']) {
+        user.avatar = `/uploads/${req.files['avatar'][0].filename}`;
+      }
+      if (req.files['idDocument']) {
+        user.idDocument = `/uploads/${req.files['idDocument'][0].filename}`;
+      }
+      if (req.files['ownershipProof']) {
+        user.ownershipProof = `/uploads/${req.files['ownershipProof'][0].filename}`;
+      }
     }
 
     await user.save();

@@ -1,8 +1,12 @@
+
 const express = require('express');
 const { body, validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const router = express.Router();
+const { OAuth2Client } = require('google-auth-library');
+
+const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 // Register
 router.post('/register', [
@@ -80,6 +84,57 @@ router.post('/login', [
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Google OAuth login
+router.post('/google-login', async (req, res) => {
+  const { tokenId, role } = req.body;
+  if (!tokenId || !role) {
+    return res.status(400).json({ message: 'Token ID and role are required' });
+  }
+
+  try {
+    const ticket = await googleClient.verifyIdToken({
+      idToken: tokenId,
+      audience: process.env.GOOGLE_CLIENT_ID
+    });
+    const payload = ticket.getPayload();
+    const { sub: googleId, email, name, picture } = payload;
+
+    let user = await User.findOne({ googleId });
+    if (!user) {
+      // Check if email already exists
+      user = await User.findOne({ email });
+      if (user) {
+        // Link googleId to existing user
+        user.googleId = googleId;
+        await user.save();
+      } else {
+        // Create new user
+        user = new User({
+          name,
+          email,
+          googleId,
+          avatar: picture,
+          role,
+          phone: '' // optional, can be updated later
+        });
+        await user.save();
+      }
+    }
+
+    // Generate JWT
+    const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, {
+      expiresIn: '1h'
+    });
+
+    console.log(`User logged in with Google: ${email}`);
+
+    res.json({ token, user: { id: user._id, name: user.name, email: user.email, role: user.role } });
+  } catch (err) {
+    console.error(err);
+    res.status(401).json({ message: 'Invalid Google token' });
   }
 });
 

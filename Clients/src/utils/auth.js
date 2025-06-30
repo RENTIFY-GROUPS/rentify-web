@@ -6,17 +6,35 @@ export const register = async (userData) => {
     localStorage.setItem('token', response.data.token);
     return response.data.user;
   } catch (error) {
-    throw error.response.data.message || 'Registration failed';
+    const message = error?.response?.data?.message || 'Registration failed';
+    throw new Error(message);
   }
 };
 
 export const login = async (credentials) => {
+  // Mock login for development without backend
+  if (process.env.REACT_APP_USE_MOCK_LOGIN === 'true') {
+    if (credentials.email === 'test@example.com' && credentials.password === 'password') {
+      const mockUser = {
+        id: 'mock-id',
+        name: 'Test User',
+        email: 'test@example.com',
+        role: 'tenant'
+      };
+      localStorage.setItem('token', 'mock-token');
+      return mockUser;
+    } else {
+      throw new Error('Invalid email or password');
+    }
+  }
+
   try {
     const response = await API.post('/auth/login', credentials);
     localStorage.setItem('token', response.data.token);
     return response.data.user;
   } catch (error) {
-    throw error.response.data.message || 'Login failed';
+    const message = error?.response?.data?.message || 'Login failed';
+    throw new Error(message);
   }
 };
 

@@ -1,5 +1,11 @@
 const mongoose = require('mongoose');
 
+const neighborhoodInsightSchema = new mongoose.Schema({
+  crimeRate: { type: String },
+  schools: { type: String },
+  transport: { type: String }
+}, { _id: false });
+
 const propertySchema = new mongoose.Schema({
   title: { type: String, required: true },
   description: { type: String, required: true },
@@ -9,6 +15,10 @@ const propertySchema = new mongoose.Schema({
   bathrooms: { type: Number, required: true },
   amenities: [String],
   images: [String],
+  videos: [String],
+  floorPlans: [String],
+  tags: [String],
+  neighborhoodInsights: neighborhoodInsightSchema,
   landlord: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   verified: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now }

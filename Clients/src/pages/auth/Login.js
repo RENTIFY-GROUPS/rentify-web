@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { login } from '../../utils/auth';
 
 export default function Login() {
@@ -7,15 +7,20 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError('');
+    setSuccess('');
     try {
       await login({ email, password });
-      navigate('/'); // Redirect to home or dashboard after login
+      setSuccess('Login successful!');
+      setTimeout(() => {
+        navigate('/'); // Redirect to home or dashboard after login
+      }, 1000);
     } catch (err) {
       setError(err.message || 'Failed to login');
     } finally {
@@ -27,6 +32,7 @@ export default function Login() {
     <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded shadow">
       <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
       {error && <div className="mb-4 text-red-600">{error}</div>}
+      {success && <div className="mb-4 text-green-600">{success}</div>}
       <form onSubmit={handleSubmit}>
         <label className="block mb-2 font-semibold" htmlFor="email">Email</label>
         <input
@@ -54,6 +60,14 @@ export default function Login() {
           {loading ? 'Logging in...' : 'Login'}
         </button>
       </form>
+      <div className="mt-4 text-center">
+        <p>
+          Don't have an account?{' '}
+          <Link to="/register" className="text-blue-600 hover:underline">
+            Register here
+          </Link>
+        </p>
+      </div>
     </div>
   );
 }

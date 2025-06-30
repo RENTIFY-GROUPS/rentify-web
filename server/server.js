@@ -8,6 +8,10 @@ const morgan = require('morgan');
 const authRoutes = require('./routes/auth');
 const propertyRoutes = require('./routes/properties');
 const profileRoutes = require('./routes/profile');
+const ratingsRoutes = require('./routes/ratings');
+const transactionsRoutes = require('./routes/transactions');
+const auctionsRoutes = require('./routes/auctions');
+const backgroundChecksRoutes = require('./routes/backgroundChecks');
 
 console.log('authRoutes type:', typeof authRoutes);
 console.log('propertyRoutes type:', typeof propertyRoutes);
@@ -43,6 +47,10 @@ if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY || !pr
 app.use('/api/auth', authRoutes);
 app.use('/api/properties', propertyRoutes);
 app.use('/api/profile', profileRoutes);
+app.use('/api/ratings', ratingsRoutes);
+app.use('/api/transactions', transactionsRoutes);
+app.use('/api/auctions', auctionsRoutes);
+app.use('/api/backgroundChecks', backgroundChecksRoutes);
 
 // Centralized error handling middleware
 app.use((err, req, res, next) => {
