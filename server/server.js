@@ -12,6 +12,7 @@ const ratingsRoutes = require('./routes/ratings');
 const transactionsRoutes = require('./routes/transactions');
 const auctionsRoutes = require('./routes/auctions');
 const backgroundChecksRoutes = require('./routes/backgroundChecks');
+const savedSearchesRoutes = require('./routes/savedSearches');
 
 console.log('authRoutes type:', typeof authRoutes);
 console.log('propertyRoutes type:', typeof propertyRoutes);
@@ -51,6 +52,10 @@ app.use('/api/ratings', ratingsRoutes);
 app.use('/api/transactions', transactionsRoutes);
 app.use('/api/auctions', auctionsRoutes);
 app.use('/api/backgroundChecks', backgroundChecksRoutes);
+app.use('/api/savedSearches', savedSearchesRoutes);
+app.use('/api/conversations', require('./routes/conversations'));
+app.use('/api/payments', require('./routes/payments'));
+app.use('/api/reviews', require('./routes/reviews'));
 
 // Centralized error handling middleware
 app.use((err, req, res, next) => {
@@ -64,6 +69,26 @@ app.get('/', (req, res) => {
 });
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
+http.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
+});
+
+io.on('connection', (socket) => {
+  console.log('a user connected');
+
+  socket.on('joinConversation', (conversationId) => {
+    socket.join(conversationId);
+  });
+
+  socket.on('sendMessage', async (data) => {
+    const { conversationId, sender, receiver, content } = data;
+    const message = new Message({ conversationId, sender, receiver, content });
+    await message.save();
+
+    io.to(conversationId).emit('receiveMessage', message);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('user disconnected');
+  });
 });

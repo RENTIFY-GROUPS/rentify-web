@@ -18,7 +18,9 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.3.1",
     "morgan": "^1.10.0",
-    "nodemon": "^2.0.15"
+    "nodemon": "^2.0.15",
+    "socket.io": "^4.8.1",
+    "stripe": "^18.3.0"
   },
   "devDependencies": {
     "jest": "^28.1.0",

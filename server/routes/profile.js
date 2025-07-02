@@ -80,4 +80,26 @@ router.put('/', auth, uploadMultiple, [
   }
 });
 
+// Get landlord dashboard data
+router.get('/landlord-dashboard', auth, async (req, res) => {
+  try {
+    if (req.user.role !== 'landlord') {
+      return res.status(403).json({ message: 'Access denied. Not a landlord.' });
+    }
+
+    const landlord = await User.findById(req.user.id)
+      .populate('portfolio') // Populate properties
+      .populate('transactionHistory'); // Populate transactions
+
+    if (!landlord) {
+      return res.status(404).json({ message: 'Landlord not found.' });
+    }
+
+    res.json(landlord);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 module.exports = router;

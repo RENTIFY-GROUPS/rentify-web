@@ -17,6 +17,7 @@ export default function Navbar() {
         <Link to="/" className="text-xl font-bold">Rentify</Link>
         <div className="hidden sm:flex space-x-4 items-center">
           <Link to="/listings" className="hover:underline">Listings</Link>
+          <Link to="/compare-properties" className="hover:underline">Compare</Link>
           <>
             <Link to="/auctions" className="hover:underline">Auctions</Link>
             <Link to={user ? `/account` : `/login`} className="hover:underline">Profile</Link>
@@ -41,6 +42,7 @@ export default function Navbar() {
       {menuOpen && (
         <div className="sm:hidden mt-2 space-y-2">
           <Link to="/listings" className="block px-2 py-1 hover:underline">Listings</Link>
+          <Link to="/compare-properties" className="block px-2 py-1 hover:underline">Compare</Link>
           <>
             <Link to="/auctions" className="block px-2 py-1 hover:underline">Auctions</Link>
             <Link to={user ? `/account` : `/login`} className="block px-2 py-1 hover:underline">Profile</Link>

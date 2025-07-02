@@ -29,6 +29,8 @@ router.get('/', [
   query('bedrooms').optional().isInt({ min: 0 }).withMessage('Bedrooms must be a non-negative integer'),
   query('amenities').optional().isArray().withMessage('Amenities must be an array'),
   query('tags').optional().isArray().withMessage('Tags must be an array'),
+  query('propertyType').optional().isString().withMessage('propertyType must be a string'),
+  query('leaseDuration').optional().isString().withMessage('leaseDuration must be a string'),
   query('page').optional().isInt({ min: 1 }).withMessage('Page must be a positive integer'),
   query('limit').optional().isInt({ min: 1 }).withMessage('Limit must be a positive integer'),
   query('sortBy').optional().isIn(['price', 'bedrooms', 'bathrooms']).withMessage('Invalid sort field'),
@@ -40,7 +42,7 @@ router.get('/', [
   }
 
   try {
-    const { minPrice, maxPrice, location, bedrooms, amenities, tags, page = 1, limit = 10, sortBy = 'price', order = 'asc' } = req.query;
+    const { minPrice, maxPrice, location, bedrooms, amenities, tags, propertyType, leaseDuration, page = 1, limit = 10, sortBy = 'price', order = 'asc' } = req.query;
     let query = {};
 
     if (minPrice) query.price = { $gte: Number(minPrice) };
@@ -49,6 +51,8 @@ router.get('/', [
     if (bedrooms) query.bedrooms = Number(bedrooms);
     if (amenities) query.amenities = { $all: amenities };
     if (tags) query.tags = { $all: tags };
+    if (propertyType) query.propertyType = propertyType;
+    if (leaseDuration) query.leaseDuration = leaseDuration;
 
     const sortOrder = order === 'asc' ? 1 : -1;
     const sortOptions = {};
@@ -82,6 +86,40 @@ router.get('/:id', async (req, res) => {
       return res.status(404).json({ message: 'Property not found' });
     }
     res.json(property);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Get nearby properties
+router.get('/nearby', [
+  query('latitude').isFloat().withMessage('Latitude must be a number'),
+  query('longitude').isFloat().withMessage('Longitude must be a number'),
+  query('radius').optional().isFloat({ min: 0 }).withMessage('Radius must be a positive number'),
+], async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ message: errors.array().map(e => e.msg).join(', ') });
+  }
+
+  try {
+    const { latitude, longitude, radius = 10 } = req.query; // Default radius 10 km
+    
+    // MongoDB geospatial query (assuming 2dsphere index on a 'location' field in Property model)
+    // For now, we'll use a simple filter based on latitude/longitude range
+    // A proper geospatial query requires a GeoJSON point field and a 2dsphere index.
+    // For demonstration, we'll filter by a simple bounding box.
+    const lat = parseFloat(latitude);
+    const lng = parseFloat(longitude);
+    const r = parseFloat(radius);
+
+    const properties = await Property.find({
+      latitude: { $gte: lat - (r / 111.2), $lte: lat + (r / 111.2) }, // Approx 1 degree lat = 111.2 km
+      longitude: { $gte: lng - (r / (111.2 * Math.cos(lat * Math.PI / 180))), $lte: lng + (r / (111.2 * Math.cos(lat * Math.PI / 180))) },
+    }).populate('landlord', 'name email phone');
+
+    res.json({ properties });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Server error' });

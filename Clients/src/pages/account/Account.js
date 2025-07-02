@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../utils/api';
+import { FaCheckCircle, FaTimesCircle, FaUserCircle, FaIdCard, FaFileAlt } from 'react-icons/fa';
 
 const Account = () => {
   const [formData, setFormData] = useState({
@@ -97,99 +98,173 @@ const Account = () => {
     }
   };
 
-  if (loading) return <p>Loading...</p>;
+  // Calculate profile completeness
+  const calculateCompleteness = () => {
+    let completedFields = 0;
+    const totalFields = 5; // Name, Email, Phone, Avatar, Role
+
+    if (formData.name) completedFields++;
+    if (formData.email) completedFields++;
+    if (formData.phone) completedFields++;
+    if (formData.avatarPreview) completedFields++;
+    if (formData.role) completedFields++;
+
+    if (formData.role === 'landlord') {
+      // Add landlord specific fields
+      if (formData.idDocumentPreview) completedFields++;
+      if (formData.ownershipProofPreview) completedFields++;
+      // Adjust total fields for landlord
+      return Math.round(((completedFields / (totalFields + 2)) * 100));
+    }
+
+    return Math.round(((completedFields / totalFields) * 100));
+  };
+
+  const profileCompleteness = calculateCompleteness();
+
+  if (loading) return <p className="text-center mt-10">Loading profile...</p>;
 
   return (
-    <div className="max-w-md mx-auto p-4">
-      <h2 className="text-2xl font-bold mb-4">Account Profile</h2>
-      {message && <p className="mb-4 text-red-600">{message}</p>}
-      <form onSubmit={onSubmit} encType="multipart/form-data">
-        <div className="mb-4">
-          <label className="block mb-1">Name</label>
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={onChange}
-            className="w-full border px-3 py-2 rounded"
-            required
-          />
+    <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-xl mt-10">
+      <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">Your Profile</h2>
+      {message && <p className={`mb-4 p-3 rounded-md ${message.includes('Failed') ? 'bg-red-100 text-red-600' : 'bg-green-100 text-green-600'}`}>{message}</p>}
+
+      {/* Profile Completeness Meter */}
+      <div className="mb-6">
+        <h3 className="text-xl font-semibold mb-2">Profile Completeness</h3>
+        <div className="w-full bg-gray-200 rounded-full h-4">
+          <div
+            className="bg-blue-500 h-4 rounded-full text-xs flex items-center justify-center text-white"
+            style={{ width: `${profileCompleteness}%` }}
+          >
+            {profileCompleteness}%
+          </div>
         </div>
-        <div className="mb-4">
-          <label className="block mb-1">Email</label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={onChange}
-            className="w-full border px-3 py-2 rounded"
-            required
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block mb-1">Phone</label>
-          <input
-            type="tel"
-            name="phone"
-            value={formData.phone}
-            onChange={onChange}
-            className="w-full border px-3 py-2 rounded"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block mb-1">Password (leave blank to keep current)</label>
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={onChange}
-            className="w-full border px-3 py-2 rounded"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block mb-1">Avatar</label>
-          {formData.avatarPreview && (
-            <img src={formData.avatarPreview} alt="Avatar Preview" className="w-24 h-24 mb-2 rounded-full object-cover" />
+        <p className="text-sm text-gray-500 mt-2">Complete your profile to unlock all features!</p>
+      </div>
+
+      {/* Verification Badges */}
+      <div className="mb-8">
+        <h3 className="text-xl font-semibold mb-3">Verification Status</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="flex items-center">
+            {formData.email ? <FaCheckCircle className="text-green-500 mr-2" /> : <FaTimesCircle className="text-red-500 mr-2" />}
+            <span className="font-medium">Email Verified</span>
+          </div>
+          <div className="flex items-center">
+            {formData.avatarPreview ? <FaCheckCircle className="text-green-500 mr-2" /> : <FaTimesCircle className="text-red-500 mr-2" />}
+            <span className="font-medium">Profile Photo Added</span>
+          </div>
+          {formData.role === 'landlord' && (
+            <>
+              <div className="flex items-center">
+                {formData.idDocumentPreview ? <FaCheckCircle className="text-green-500 mr-2" /> : <FaTimesCircle className="text-red-500 mr-2" />}
+                <span className="font-medium">ID Verified</span>
+              </div>
+              <div className="flex items-center">
+                {formData.ownershipProofPreview ? <FaCheckCircle className="text-green-500 mr-2" /> : <FaTimesCircle className="text-red-500 mr-2" />}
+                <span className="font-medium">Ownership Verified</span>
+              </div>
+            </>
           )}
-          <input
-            type="file"
-            name="avatar"
-            accept="image/*"
-            onChange={onChange}
-            className="w-full"
-          />
         </div>
+      </div>
+
+      <form onSubmit={onSubmit} encType="multipart/form-data" className="space-y-6">
+        {/* General Profile Information */}
+        <div className="bg-gray-50 p-5 rounded-lg shadow-inner">
+          <h3 className="text-2xl font-bold mb-4 text-gray-700">General Information</h3>
+          <div>
+            <label className="block mb-2 font-semibold text-gray-700">Name</label>
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={onChange}
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-transparent"
+              required
+            />
+          </div>
+          <div>
+            <label className="block mb-2 font-semibold text-gray-700">Email</label>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={onChange}
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-transparent"
+              required
+            />
+          </div>
+          <div>
+            <label className="block mb-2 font-semibold text-gray-700">Phone</label>
+            <input
+              type="tel"
+              name="phone"
+              value={formData.phone}
+              onChange={onChange}
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-transparent"
+            />
+          </div>
+          <div>
+            <label className="block mb-2 font-semibold text-gray-700">Password (leave blank to keep current)</label>
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={onChange}
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-transparent"
+            />
+          </div>
+          <div>
+            <label className="block mb-2 font-semibold text-gray-700">Profile Avatar</label>
+            {formData.avatarPreview && (
+              <img src={formData.avatarPreview} alt="Avatar Preview" className="w-32 h-32 mb-3 rounded-full object-cover border-4 border-blue-300 shadow-md" />
+            )}
+            <input
+              type="file"
+              name="avatar"
+              accept="image/*"
+              onChange={onChange}
+              className="w-full text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+            />
+          </div>
+        </div>
+
+        {/* Landlord Specific Documents */}
         {formData.role === 'landlord' && (
-          <>
-            <div className="mb-4">
-              <label className="block mb-1">ID Document</label>
+          <div className="bg-gray-50 p-5 rounded-lg shadow-inner">
+            <h3 className="text-2xl font-bold mb-4 text-gray-700">Landlord Documents</h3>
+            <div>
+              <label className="block mb-2 font-semibold text-gray-700">ID Document</label>
               {formData.idDocumentPreview && (
-                <img src={formData.idDocumentPreview} alt="ID Document Preview" className="w-full mb-2" />
+                <img src={formData.idDocumentPreview} alt="ID Document Preview" className="w-full h-48 object-contain mb-3 border border-gray-300 rounded-lg" />
               )}
               <input
                 type="file"
                 name="idDocument"
                 accept="image/*,application/pdf"
                 onChange={onChange}
-                className="w-full"
+                className="w-full text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
               />
             </div>
-            <div className="mb-4">
-              <label className="block mb-1">Proof of Ownership</label>
+            <div className="mt-6">
+              <label className="block mb-2 font-semibold text-gray-700">Proof of Ownership</label>
               {formData.ownershipProofPreview && (
-                <img src={formData.ownershipProofPreview} alt="Ownership Proof Preview" className="w-full mb-2" />
+                <img src={formData.ownershipProofPreview} alt="Ownership Proof Preview" className="w-full h-48 object-contain mb-3 border border-gray-300 rounded-lg" />
               )}
               <input
                 type="file"
                 name="ownershipProof"
                 accept="image/*,application/pdf"
                 onChange={onChange}
-                className="w-full"
+                className="w-full text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
               />
             </div>
-          </>
+          </div>
         )}
-        <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+
+        <button type="submit" className="w-full bg-blue-600 text-white p-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors duration-200 shadow-md">
           Update Profile
         </button>
       </form>

@@ -18,9 +18,14 @@ const propertySchema = new mongoose.Schema({
   videos: [String],
   floorPlans: [String],
   tags: [String],
+  propertyType: { type: String, enum: ['Apartment', 'House', 'Condo'] },
+  leaseDuration: { type: String, enum: ['Short-term', 'Long-term'] },
   neighborhoodInsights: neighborhoodInsightSchema,
   landlord: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   verified: { type: Boolean, default: false },
+  latitude: { type: Number },
+  longitude: { type: Number },
+  virtualTourUrl: { type: String },
   createdAt: { type: Date, default: Date.now }
 });
 

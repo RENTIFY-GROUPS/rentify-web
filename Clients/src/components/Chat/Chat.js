@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import nacl from 'tweetnacl';
 import naclUtil from 'tweetnacl-util';
+import { FaPaperclip, FaCheckDouble } from 'react-icons/fa'; // Import icons
 
 // Utility functions for encryption/decryption
 const generateKeyPair = () => {
@@ -60,11 +61,26 @@ const Chat = () => {
       encryptedMessage: encrypted,
       nonce: naclUtil.encodeBase64(nonce),
       sender: 'me',
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
+      read: false, // Added for read receipts
     };
 
     setMessages(prev => [...prev, newMessage]);
     setInput('');
+  };
+
+  const handleFileAttach = () => {
+    // Placeholder for file attachment logic
+    const newMessage = {
+      id: Date.now(),
+      encryptedMessage: encryptMessage('[File Attached: lease_draft.pdf]', nacl.randomBytes(nacl.box.nonceLength), peerPublicKey, keyPair.secretKey),
+      nonce: naclUtil.encodeBase64(nacl.randomBytes(nacl.box.nonceLength)),
+      sender: 'me',
+      timestamp: new Date().toISOString(),
+      read: false,
+      isAttachment: true,
+    };
+    setMessages(prev => [...prev, newMessage]);
   };
 
   const decrypt = (msg) => {
@@ -85,6 +101,11 @@ const Chat = () => {
           <div key={msg.id} className={`mb-2 ${msg.sender === 'me' ? 'text-right' : 'text-left'}`}>
             <div className="inline-block bg-primary text-white rounded px-3 py-1">
               {decrypt(msg)}
+              {msg.sender === 'me' && (
+                <span className="ml-2 text-xs">
+                  <FaCheckDouble className={msg.read ? 'text-blue-300' : 'text-gray-300'} />
+                </span>
+              )}
             </div>
             <div className="text-xs text-text">{new Date(msg.timestamp).toLocaleTimeString()}</div>
           </div>
@@ -92,11 +113,18 @@ const Chat = () => {
         <div ref={messagesEndRef} />
       </div>
       <div className="flex">
+        <button
+          onClick={handleFileAttach}
+          className="bg-gray-300 text-gray-800 px-4 py-2 rounded-l hover:bg-gray-400"
+          title="Attach File"
+        >
+          <FaPaperclip />
+        </button>
         <input
           type="text"
           value={input}
           onChange={handleInputChange}
-          className="flex-grow border border-primary rounded-l px-3 py-2 text-text"
+          className="flex-grow border border-primary px-3 py-2 text-text"
           placeholder="Type a message"
         />
         <button
