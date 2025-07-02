@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const Rating = require('../models/Rating');
-const authMiddleware = require('../middleware/auth');
+const { auth } = require('../middleware/auth');
 
 // Create a new rating
-router.post('/', authMiddleware, async (req, res) => {
+router.post('/', auth, async (req, res) => {
   try {
     const { reviewee, property, rating, comment } = req.body;
     const reviewer = req.user.id;
