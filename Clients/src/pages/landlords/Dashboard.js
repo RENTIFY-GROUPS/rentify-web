@@ -1,18 +1,37 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../utils/api';
 import PropertyCard from '../../components/PropertyCard';
+import { toast } from 'react-toastify';
 
 export default function LandlordDashboard() {
   const [landlordData, setLandlordData] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [referralCode, setReferralCode] = useState('');
+  const [referralCredit, setReferralCredit] = useState(0);
+
+  const handleClaimCredit = async () => {
+    setLoading(true);
+    try {
+      const response = await api.post('/referrals/claim-credit');
+      toast.success(response.data.message);
+      setReferralCredit(0); // Reset credit after claiming
+    } catch (err) {
+      console.error('Error claiming referral credit:', err);
+      toast.error(err.response?.data?.message || 'Failed to claim referral credit.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     const fetchLandlordData = async () => {
       try {
         const res = await api.get('/profile/landlord-dashboard');
         setLandlordData(res.data);
+        setReferralCode(res.data.referralCode);
+        setReferralCredit(res.data.referralCredit);
 
         const reviewsRes = await api.get(`/reviews/landlord/${res.data._id}`);
         setReviews(reviewsRes.data);
@@ -78,8 +97,35 @@ export default function LandlordDashboard() {
         </div>
         <div className="bg-white p-6 rounded-lg shadow-md">
           <h2 className="text-xl font-semibold mb-3">Your Referral Code</h2>
-          <p className="text-3xl font-bold text-purple-600">{landlordData.referralCode}</p>
+          <p className="text-3xl font-bold text-purple-600">{referralCode}</p>
           <p className="text-sm text-gray-600">Share this code with friends to earn rewards!</p>
+        </div>
+        <div className="bg-white p-6 rounded-lg shadow-md">
+          <h2 className="text-xl font-semibold mb-3">Referral Credit</h2>
+          <p className="text-3xl font-bold text-green-600">₦{referralCredit.toLocaleString()}</p>
+          {referralCredit > 0 && (
+            <button
+              onClick={handleClaimCredit}
+              className="mt-4 bg-blue-600 text-white p-2 rounded hover:bg-blue-700 disabled:opacity-50"
+              disabled={loading}
+            >
+              {loading ? 'Claiming...' : 'Claim Credit'}
+            </button>
+          )}
+        </div>
+        <div className="bg-white p-6 rounded-lg shadow-md">
+          <h2 className="text-xl font-semibold mb-3">Your Badges</h2>
+          {landlordData.badges && landlordData.badges.length > 0 ? (
+            <div className="flex flex-wrap gap-2">
+              {landlordData.badges.map((badge, index) => (
+                <span key={index} className="bg-yellow-500 text-white text-sm font-bold px-3 py-1 rounded-full">
+                  {badge}
+                </span>
+              ))}
+            </div>
+          ) : (
+            <p className="text-gray-600">No badges earned yet.</p>
+          )}
         </div>
         {/* Add more analytics here */}
       </div>

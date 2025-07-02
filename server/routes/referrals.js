@@ -1,22 +1,28 @@
 const express = require('express');
+const { body, validationResult } = require('express-validator');
 const auth = require('../middleware/auth');
 const User = require('../models/User');
 const router = express.Router();
 
-// Simulate applying a referral discount
-router.post('/apply-discount', auth, async (req, res) => {
+// Claim referral credit
+router.post('/claim-credit', auth, async (req, res) => {
   try {
-    const { referralCode } = req.body;
-
-    const referredByUser = await User.findOne({ referralCode });
-
-    if (!referredByUser) {
-      return res.status(400).json({ message: 'Invalid referral code' });
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
     }
 
-    // In a real application, you would apply a discount here
-    // For example, update user's discount balance, apply a coupon, etc.
-    res.json({ message: 'Referral discount applied successfully!', discountAmount: 10 });
+    if (user.referralCredit <= 0) {
+      return res.status(400).json({ message: 'No referral credit to claim.' });
+    }
+
+    // Here you would implement the logic to apply the credit, e.g., generate a coupon,
+    // reduce next payment, etc. For now, we'll just reset the credit.
+    const claimedAmount = user.referralCredit;
+    user.referralCredit = 0;
+    await user.save();
+
+    res.json({ message: `Successfully claimed ${claimedAmount} referral credit.`, claimedAmount });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Server error' });

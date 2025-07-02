@@ -9,6 +9,7 @@ export default function Register() {
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('tenant');
+  const [referralCode, setReferralCode] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
@@ -137,6 +138,14 @@ export default function Register() {
               <option value="tenant">Tenant (Looking to rent)</option>
               <option value="landlord">Landlord (Property Owner)</option>
             </select>
+            <label className="block mb-2 font-semibold text-gray-700" htmlFor="referralCode">Referral Code (Optional)</label>
+            <input
+              id="referralCode"
+              type="text"
+              className="w-full p-3 border border-gray-300 rounded-lg mb-6 focus:ring-2 focus:ring-blue-400 focus:border-transparent"
+              value={referralCode}
+              onChange={(e) => setReferralCode(e.target.value)}
+            />
             <div className="flex justify-between">
               <button
                 type="button"

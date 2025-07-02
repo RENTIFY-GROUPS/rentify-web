@@ -1,10 +1,16 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+const { encrypt, decrypt } = require('../utils/encryption');
 
 const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
-  phone: { type: String, required: true },
+  phone: { 
+    type: String, 
+    required: true,
+    set: encrypt,
+    get: decrypt
+  },
   password: { type: String, required: true },
   role: { type: String, enum: ['landlord', 'tenant'], required: true },
   avatar: { type: String }, // URL to profile image
@@ -13,8 +19,16 @@ const userSchema = new mongoose.Schema({
   googleId: { type: String, unique: true, sparse: true },
 
   // KYC Documents
-  idDocument: { type: String }, // URL or path to ID document
-  ownershipProof: { type: String }, // URL or path to proof of ownership
+  idDocument: { 
+    type: String,
+    set: encrypt,
+    get: decrypt
+  }, // URL or path to ID document
+  ownershipProof: { 
+    type: String,
+    set: encrypt,
+    get: decrypt
+  }, // URL or path to proof of ownership
 
   // 2FA
   twoFactorEnabled: { type: Boolean, default: false },
@@ -40,6 +54,7 @@ const userSchema = new mongoose.Schema({
   // Referral Program
   referralCode: { type: String, unique: true, sparse: true },
   referredBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  referralCredit: { type: Number, default: 0 },
 
   // Landlord Listing Progress
   listingProgress: {

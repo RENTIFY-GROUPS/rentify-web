@@ -1,9 +1,10 @@
 const express = require('express');
 const { body, query, validationResult } = require('express-validator');
-const auth = require('../middleware/auth');
+const { auth, adminAuth } = require('../middleware/auth');
 const multer = require('multer');
 const path = require('path');
 const Property = require('../models/Property');
+const User = require('../models/User');
 const SavedSearch = require('../models/SavedSearch');
 const router = express.Router();
 
@@ -44,7 +45,16 @@ router.get('/', [
 
   try {
     const { minPrice, maxPrice, location, bedrooms, amenities, tags, propertyType, leaseDuration, page = 1, limit = 10, sortBy = 'price', order = 'asc' } = req.query;
-    let query = {};
+    let query = { status: 'approved' }; // Only show approved properties by default
+
+    // If an admin is logged in, they can see all properties or filter by status
+    if (req.user && req.user.role === 'admin') {
+      if (req.query.status) {
+        query.status = req.query.status; // Allow admin to filter by any status
+      } else {
+        delete query.status; // Admin sees all properties if no status filter is provided
+      }
+    }
 
     if (minPrice) query.price = { $gte: Number(minPrice) };
     if (maxPrice) query.price = { ...query.price, $lte: Number(maxPrice) };
@@ -86,6 +96,12 @@ router.get('/:id', async (req, res) => {
     if (!property) {
       return res.status(404).json({ message: 'Property not found' });
     }
+
+    // If the property is not approved and the user is not an admin, return 404
+    if (property.status !== 'approved' && (!req.user || req.user.role !== 'admin')) {
+      return res.status(404).json({ message: 'Property not found' });
+    }
+
     res.json(property);
   } catch (err) {
     console.error(err);
@@ -173,7 +189,8 @@ router.post('/', auth, uploadMultiple, [
       images,
       videos,
       floorPlans,
-      landlord: req.user.id
+      landlord: req.user.id,
+      status: 'pending' // New properties are pending by default
     });
 
     await property.save();
@@ -299,3 +316,61 @@ router.get('/recommendations', auth, async (req, res) => {
 });
 
 module.exports = router;
+
+// Admin: Update property status
+router.put('/:id/status', auth, adminAuth, [
+  body('status').isIn(['pending', 'approved', 'rejected']).withMessage('Invalid status'),
+], async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ message: errors.array().map(e => e.msg).join(', ') });
+  }
+
+  try {
+    const property = await Property.findById(req.params.id);
+    if (!property) {
+      return res.status(404).json({ message: 'Property not found' });
+    }
+
+    property.status = req.body.status;
+    await property.save();
+
+    // Check for Super Landlord badge
+    if (req.body.status === 'approved') {
+      const landlord = await User.findById(property.landlord);
+      if (landlord) {
+        const approvedPropertiesCount = await Property.countDocuments({ landlord: landlord._id, status: 'approved' });
+        if (approvedPropertiesCount >= 5 && !landlord.badges.includes('Super Landlord')) {
+          landlord.badges.push('Super Landlord');
+          await landlord.save();
+          console.log(`Super Landlord badge awarded to ${landlord.email}`);
+        }
+      }
+    }
+
+    res.json({ message: `Property ${property.id} status updated to ${property.status}` });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Admin: Clear property flag
+router.put('/:id/clear-flag', auth, adminAuth, async (req, res) => {
+  try {
+    const property = await Property.findById(req.params.id);
+    if (!property) {
+      return res.status(404).json({ message: 'Property not found' });
+    }
+
+    property.flaggedReason = undefined; // Clear the flag
+    // Optionally, set status back to pending if it was rejected due to flag, or keep approved
+    // For now, we'll just clear the flag. Admin can manually approve/reject after.
+    await property.save();
+
+    res.json({ message: `Flag for property ${property.id} cleared.` });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});

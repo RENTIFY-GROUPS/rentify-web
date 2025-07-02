@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const User = require('./User');
 
 const neighborhoodInsightSchema = new mongoose.Schema({
   crimeRate: { type: String },
@@ -30,6 +31,34 @@ const propertySchema = new mongoose.Schema({
   status: { type: String, enum: ['pending', 'approved', 'rejected'], default: 'pending' },
   flaggedReason: { type: String },
   createdAt: { type: Date, default: Date.now }
+});
+
+propertySchema.pre('save', async function(next) {
+  // Check for duplicate listings (title and location)
+  if (this.isNew || this.isModified('title') || this.isModified('location')) {
+    const existingProperty = await this.constructor.findOne({
+      title: this.title,
+      location: this.location,
+      _id: { $ne: this._id } // Exclude self when updating
+    });
+
+    if (existingProperty) {
+      this.status = 'pending';
+      this.flaggedReason = (this.flaggedReason ? this.flaggedReason + '; ' : '') + 'Duplicate listing detected.';
+    }
+  }
+
+  // Check for suspicious keywords
+  const suspiciousKeywords = ['scam', 'fraud', 'urgent money', 'quick cash', 'investment opportunity'];
+  const textToCheck = (this.title + ' ' + this.description).toLowerCase();
+  const foundKeywords = suspiciousKeywords.filter(keyword => textToCheck.includes(keyword));
+
+  if (foundKeywords.length > 0) {
+    this.status = 'pending';
+    this.flaggedReason = (this.flaggedReason ? this.flaggedReason + '; ' : '') + `Suspicious keywords detected: ${foundKeywords.join(', ')}.`;
+  }
+
+  next();
 });
 
 module.exports = mongoose.model('Property', propertySchema);

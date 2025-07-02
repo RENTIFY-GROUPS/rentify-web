@@ -106,7 +106,7 @@ export default function PropertyDetails() {
         <Carousel showArrows={true} infiniteLoop={true} dynamicHeight={true}>
           {property.images.map((image, index) => (
             <div key={index}>
-              <img src={image} alt={`${property.title} ${index + 1}`} className="w-full h-96 object-cover rounded-lg shadow-lg" />
+              <img src={image} alt={`${property.title} ${index + 1}`} className="w-full h-96 object-cover rounded-lg shadow-lg" loading="lazy" />
             </div>
           ))}
           {property.videos && property.videos.length > 0 && property.videos.map((video, index) => (

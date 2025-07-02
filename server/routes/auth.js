@@ -64,6 +64,13 @@ router.post('/register', [
     user = new User({ name, email, phone, password, role, referredBy: referredByUser ? referredByUser._id : null });
     await user.save();
 
+    // Award referral credit to referrer if applicable
+    if (referredByUser) {
+      referredByUser.referralCredit += 10; // Example: Award 10 units of credit
+      await referredByUser.save();
+      console.log(`Referral credit awarded to ${referredByUser.email}`);
+    }
+
     // Generate JWT
     const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, {
       expiresIn: '1h'

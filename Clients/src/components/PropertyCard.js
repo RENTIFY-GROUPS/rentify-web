@@ -19,6 +19,7 @@ export default function PropertyCard({ property }) {
             src={property.images && property.images.length > 0 ? property.images[0] : 'https://via.placeholder.com/400x250?text=No+Image+Available'} 
             alt={property.title} 
             className="w-full h-56 object-cover"
+            loading="lazy"
           />
           {property.verified && (
             <div className="absolute top-3 left-3 group">

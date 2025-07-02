@@ -18,6 +18,7 @@ const PropertyDetails = lazy(() => import('./pages/PropertyDetails'));
 const SavedSearches = lazy(() => import('./pages/SavedSearches'));
 const Chat = lazy(() => import('./components/messaging/Chat'));
 const TwoFactorAuth = lazy(() => import('./pages/auth/TwoFactorAuth'));
+const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
 
 function App() {
   const [runTour, setRunTour] = useState(false);
@@ -97,6 +98,7 @@ function App() {
             <Route path="/forum" element={<ForumList />} />
             <Route path="/forum/:id" element={<ForumPostDetail />} />
             <Route path="/settings/2fa" element={<TwoFactorAuth />} />
+            <Route path="/admin/dashboard" element={<AdminDashboard />} />
           </Routes>
         </Suspense>
       </ErrorBoundary>

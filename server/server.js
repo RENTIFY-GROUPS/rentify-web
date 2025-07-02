@@ -13,6 +13,7 @@ const transactionsRoutes = require('./routes/transactions');
 const auctionsRoutes = require('./routes/auctions');
 const backgroundChecksRoutes = require('./routes/backgroundChecks');
 const savedSearchesRoutes = require('./routes/savedSearches');
+const referralsRoutes = require('./routes/referrals');
 
 console.log('authRoutes type:', typeof authRoutes);
 console.log('propertyRoutes type:', typeof propertyRoutes);

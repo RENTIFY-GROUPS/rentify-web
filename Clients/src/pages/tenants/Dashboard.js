@@ -9,6 +9,19 @@ export default function TenantDashboard() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [wishlist, setWishlist] = useState(null);
   const [userProfile, setUserProfile] = useState(null);
+  const [referralCode, setReferralCode] = useState('');
+  const [referralCredit, setReferralCredit] = useState(0);
+
+  const handleClaimCredit = async () => {
+    try {
+      const response = await API.post('/referrals/claim-credit');
+      toast.success(response.data.message);
+      setReferralCredit(0); // Reset credit after claiming
+    } catch (err) {
+      console.error('Error claiming referral credit:', err);
+      toast.error(err.response?.data?.message || 'Failed to claim referral credit.');
+    }
+  };
 
   useEffect(() => {
     const fetchWishlist = async () => {
@@ -25,6 +38,8 @@ export default function TenantDashboard() {
       try {
         const res = await API.get('/profile');
         setUserProfile(res.data);
+        setReferralCode(res.data.referralCode);
+        setReferralCredit(res.data.referralCredit);
       } catch (err) {
         console.error('Failed to fetch user profile:', err);
       }
@@ -78,6 +93,37 @@ export default function TenantDashboard() {
           <p className="text-gray-600 mb-4">View and share your favorite properties.</p>
           <Link to="/wishlist" className="text-blue-600 hover:underline font-medium">View Wishlist</Link>
           <button onClick={handleShareWishlist} className="ml-4 bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 font-medium">Share Wishlist</button>
+        </div>
+        <div className="bg-white p-6 rounded-lg shadow-md">
+          <h2 className="text-xl font-semibold mb-3">Your Referral Code</h2>
+          <p className="text-3xl font-bold text-purple-600">{referralCode}</p>
+          <p className="text-sm text-gray-600">Share this code with friends to earn rewards!</p>
+        </div>
+        <div className="bg-white p-6 rounded-lg shadow-md">
+          <h2 className="text-xl font-semibold mb-3">Referral Credit</h2>
+          <p className="text-3xl font-bold text-green-600">₦{referralCredit.toLocaleString()}</p>
+          {referralCredit > 0 && (
+            <button
+              onClick={handleClaimCredit}
+              className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+            >
+              Claim Credit
+            </button>
+          )}
+        </div>
+        <div className="bg-white p-6 rounded-lg shadow-md">
+          <h2 className="text-xl font-semibold mb-3">Your Badges</h2>
+          {userProfile && userProfile.badges && userProfile.badges.length > 0 ? (
+            <div className="flex flex-wrap gap-2">
+              {userProfile.badges.map((badge, index) => (
+                <span key={index} className="bg-yellow-500 text-white text-sm font-bold px-3 py-1 rounded-full">
+                  {badge}
+                </span>
+              ))}
+            </div>
+          ) : (
+            <p className="text-gray-600">No badges earned yet.</p>
+          )}
         </div>
       <div className="bg-white p-6 rounded-lg shadow-md">
           <div className="bg-white p-6 rounded-lg shadow-md">
