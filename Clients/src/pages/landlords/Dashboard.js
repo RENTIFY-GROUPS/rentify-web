@@ -43,6 +43,12 @@ export default function LandlordDashboard() {
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-6 text-primary">Landlord Dashboard</h1>
 
+      <div className="mb-6">
+        <Link to="/settings/2fa" className="bg-purple-600 text-white p-3 rounded-lg hover:bg-purple-700 transition duration-200">
+          Manage Two-Factor Authentication
+        </Link>
+      </div>
+
       <div className="bg-white p-6 rounded-lg shadow-md mb-8">
         <h2 className="text-2xl font-bold mb-4 text-gray-800">Your Listing Progress</h2>
         <div className="space-y-4">

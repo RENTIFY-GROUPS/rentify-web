@@ -31,9 +31,23 @@ export const login = async (credentials) => {
   try {
     const response = await API.post('/auth/login', credentials);
     localStorage.setItem('token', response.data.token);
+    return { user: response.data.user, twoFactorRequired: false };
+  } catch (error) {
+    if (error.response && error.response.status === 206) {
+      return { twoFactorRequired: true, userId: error.response.data.userId };
+    }
+    const message = error?.response?.data?.message || 'Login failed';
+    throw new Error(message);
+  }
+};
+
+export const verify2fa = async (userId, token) => {
+  try {
+    const response = await API.post('/auth/login/2fa', { userId, token });
+    localStorage.setItem('token', response.data.token);
     return response.data.user;
   } catch (error) {
-    const message = error?.response?.data?.message || 'Login failed';
+    const message = error?.response?.data?.message || '2FA verification failed';
     throw new Error(message);
   }
 };

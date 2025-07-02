@@ -19,6 +19,10 @@ const userSchema = new mongoose.Schema({
   // 2FA
   twoFactorEnabled: { type: Boolean, default: false },
   twoFactorSecret: { type: String },
+  emailOtp: { type: String },
+  emailOtpExpires: { type: Date },
+  smsOtp: { type: String },
+  smsOtpExpires: { type: Date },
 
   // Profile fields for landlords
   portfolio: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Property' }],

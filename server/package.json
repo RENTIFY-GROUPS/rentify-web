@@ -18,8 +18,11 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.3.1",
     "morgan": "^1.10.0",
+    "nodemailer": "^7.0.4",
     "nodemon": "^2.0.15",
+    "qrcode": "^1.5.4",
     "socket.io": "^4.8.1",
+    "speakeasy": "^2.0.0",
     "stripe": "^18.3.0"
   },
   "devDependencies": {
