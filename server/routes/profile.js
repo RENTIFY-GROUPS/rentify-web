@@ -60,6 +60,11 @@ router.put('/', auth, uploadMultiple, [
     if (phone) user.phone = phone;
     if (password) user.password = password;
 
+    // Update listing progress
+    if (user.name && user.email && user.phone) {
+      user.listingProgress.profileComplete = true;
+    }
+
     if (req.files) {
       if (req.files['avatar']) {
         user.avatar = `/uploads/${req.files['avatar'][0].filename}`;

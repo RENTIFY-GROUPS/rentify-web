@@ -32,9 +32,10 @@ export default function SavedSearches() {
       try {
         await API.delete(`/savedSearches/${id}`);
         fetchSavedSearches(); // Refresh the list
+        toast.success('Search deleted successfully!');
       } catch (err) {
         console.error('Failed to delete saved search:', err);
-        alert('Failed to delete saved search. Please try again.');
+        toast.error('Failed to delete saved search. Please try again.');
       }
     }
   };

@@ -64,6 +64,8 @@ const FeaturedProperties = ({ properties }) => (
 
 export default function Home() {
   const [properties, setProperties] = useState([]);
+  const [recommendedProperties, setRecommendedProperties] = useState([]);
+  const [dealsOfTheDay, setDealsOfTheDay] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
@@ -77,13 +79,34 @@ export default function Home() {
         console.error('Failed to fetch properties:', error);
       }
     };
+
+    const fetchRecommendations = async () => {
+      if (isAuthenticated()) {
+        try {
+          const response = await API.get('/properties/recommendations');
+          setRecommendedProperties(response.data);
+        } catch (error) {
+          console.error('Failed to fetch recommendations:', error);
+        }
+      }
+    };
+
+    const fetchDealsOfTheDay = async () => {
+      try {
+        const response = await API.get('/properties/deals-of-the-day');
+        setDealsOfTheDay(response.data);
+      } catch (error) {
+        console.error('Failed to fetch deals of the day:', error);
+      }
+    };
+
     fetchProperties();
+    fetchRecommendations();
+    fetchDealsOfTheDay();
   }, []);
 
   const handleSearch = (query) => {
     setSearchQuery(query);
-    // In a real app, you'd navigate to a search results page
-    // For now, we can just log it.
     console.log("Searching for:", query);
   };
 
@@ -96,6 +119,36 @@ export default function Home() {
       <Hero onSearch={handleSearch} />
       <HowItWorks />
       <FeaturedProperties properties={filteredProperties} />
+
+      {dealsOfTheDay.length > 0 && (
+        <section className="py-16 bg-blue-50">
+          <div className="container mx-auto">
+            <h2 className="text-3xl font-bold mb-8 text-center">Deals of the Day!</h2>
+            <Suspense fallback={<div className="text-center">Loading Deals...</div>}>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {dealsOfTheDay.map(property => (
+                  <PropertyCard key={property._id} property={property} />
+                ))}
+              </div>
+            </Suspense>
+          </div>
+        </section>
+      )}
+
+      {isAuthenticated() && recommendedProperties.length > 0 && (
+        <section className="py-16 bg-gray-100">
+          <div className="container mx-auto">
+            <h2 className="text-3xl font-bold mb-8 text-center">Recommended for You</h2>
+            <Suspense fallback={<div className="text-center">Loading Recommendations...</div>}>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {recommendedProperties.map(property => (
+                  <PropertyCard key={property._id} property={property} />
+                ))}
+              </div>
+            </Suspense>
+          </div>
+        </section>
+      )}
     </div>
   );
 }

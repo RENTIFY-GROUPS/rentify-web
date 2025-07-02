@@ -30,11 +30,30 @@ const userSchema = new mongoose.Schema({
   favorites: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Property' }],
   inquiryHistory: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Inquiry' }],
 
-  createdAt: { type: Date, default: Date.now }
+  // Gamification
+  badges: [{ type: String }],
+
+  // Referral Program
+  referralCode: { type: String, unique: true, sparse: true },
+  referredBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+
+  // Landlord Listing Progress
+  listingProgress: {
+    profileComplete: { type: Boolean, default: false },
+    kycApproved: { type: Boolean, default: false },
+    firstPropertyListed: { type: Boolean, default: false },
+  },
+
+  createdAt: { type: Date, default: Date.now },
+  isAdmin: { type: Boolean, default: false }
+});
 });
 
-// Hash password before saving
+// Generate referral code before saving (if not already present)
 userSchema.pre('save', async function(next) {
+  if (this.isNew && !this.referralCode) {
+    this.referralCode = Math.random().toString(36).substring(2, 10).toUpperCase();
+  }
   if (!this.isModified('password')) return next();
   this.password = await bcrypt.hash(this.password, 10);
   next();

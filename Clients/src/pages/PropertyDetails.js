@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 import API from '../../utils/api';
 import PropertyCard from '../../components/PropertyCard';
 import ReviewForm from '../../components/ReviewForm';
+import { isAuthenticated } from '../../utils/auth';
 
 export default function PropertyDetails() {
   const { id } = useParams();
@@ -13,6 +14,7 @@ export default function PropertyDetails() {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isInWishlist, setIsInWishlist] = useState(false);
 
   useEffect(() => {
     const fetchPropertyAndReviews = async () => {
@@ -43,11 +45,45 @@ export default function PropertyDetails() {
         setLoading(false);
       }
     };
+
+    const checkWishlistStatus = async () => {
+      if (isAuthenticated()) {
+        try {
+          const res = await API.get('/wishlists');
+          setIsInWishlist(res.data.properties.some(prop => prop._id === id));
+        } catch (err) {
+          console.error('Failed to fetch wishlist status:', err);
+        }
+      }
+    };
+
     fetchPropertyAndReviews();
+    checkWishlistStatus();
   }, [id]);
 
   const handleReviewSubmit = (newReview) => {
     setReviews(prevReviews => [newReview, ...prevReviews]);
+  };
+
+  const handleToggleWishlist = async () => {
+    if (!isAuthenticated()) {
+      alert('Please log in to add properties to your wishlist.');
+      return;
+    }
+    try {
+      if (isInWishlist) {
+        await API.delete(`/wishlists/${id}`);
+        setIsInWishlist(false);
+        alert('Property removed from wishlist!');
+      } else {
+        await API.post('/wishlists', { propertyId: id });
+        setIsInWishlist(true);
+        alert('Property added to wishlist!');
+      }
+    } catch (err) {
+      console.error('Failed to update wishlist:', err);
+      alert('Failed to update wishlist. Please try again.');
+    }
   };
 
   if (loading) {
@@ -67,7 +103,21 @@ export default function PropertyDetails() {
       <h1 className="text-4xl font-bold mb-6 text-gray-800">{property.title}</h1>
       
       {property.images && property.images.length > 0 && (
-        <img src={property.images[0]} alt={property.title} className="w-full max-w-4xl h-96 object-cover mb-6 rounded-lg shadow-lg" />
+        <Carousel showArrows={true} infiniteLoop={true} dynamicHeight={true}>
+          {property.images.map((image, index) => (
+            <div key={index}>
+              <img src={image} alt={`${property.title} ${index + 1}`} className="w-full h-96 object-cover rounded-lg shadow-lg" />
+            </div>
+          ))}
+          {property.videos && property.videos.length > 0 && property.videos.map((video, index) => (
+            <div key={`video-${index}`}>
+              <video controls className="w-full h-96 object-cover rounded-lg shadow-lg">
+                <source src={video} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
+          ))}
+        </Carousel>
       )}
 
       {/* Virtual Tour Section */}
@@ -138,9 +188,18 @@ export default function PropertyDetails() {
 
       <div className="bg-white p-6 rounded-lg shadow-lg">
         <h2 className="text-2xl font-bold mb-4 text-gray-800">Description</h2>
-        <p className="text-lg text-gray-700 mb-4">{property.description}</p>
+        <div className="flex items-center mb-4">
+          <p className="text-lg text-gray-700 mr-4">{property.description}</p>
+          <TextToSpeechButton text={property.description} />
+        </div>
         <h3 className="text-xl font-bold mb-2 text-gray-800">Neighborhood Description</h3>
         <p className="text-lg text-gray-700">{property.neighborhoodInsights?.crimeRate || 'N/A'}</p>
+        <button
+          onClick={handleToggleWishlist}
+          className={`mt-6 px-6 py-3 rounded-lg font-semibold transition-colors duration-200 shadow-md ${isInWishlist ? 'bg-red-600 hover:bg-red-700' : 'bg-purple-600 hover:bg-purple-700'} text-white`}
+        >
+          {isInWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'}
+        </button>
       </div>
 
       <div className="bg-white p-6 rounded-lg shadow-lg mt-8">

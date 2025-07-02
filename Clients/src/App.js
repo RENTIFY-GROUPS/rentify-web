@@ -12,6 +12,8 @@ const Register = lazy(() => import('./pages/auth/Register'));
 const LandlordDashboard = lazy(() => import('./pages/landlords/Dashboard'));
 const TenantDashboard = lazy(() => import('./pages/tenants/Dashboard'));
 const PaymentHistory = lazy(() => import('./pages/tenants/PaymentHistory'));
+const RentCalculator = lazy(() => import('./pages/tenants/RentCalculator'));
+const MovingChecklist = lazy(() => import('./pages/tenants/MovingChecklist'));
 const PropertyDetails = lazy(() => import('./pages/PropertyDetails'));
 const SavedSearches = lazy(() => import('./pages/SavedSearches'));
 const Chat = lazy(() => import('./components/messaging/Chat'));
@@ -68,7 +70,9 @@ function App() {
 
   return (
     <Router>
-      <Navbar />
+      <I18nextProvider i18n={i18n}>
+      <ThemeProvider>
+      <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
       <ErrorBoundary>
         <Suspense fallback={<div>Loading...</div>}>
           <Routes>
@@ -80,13 +84,37 @@ function App() {
             <Route path="/landlord" element={<LandlordDashboard />} />
             <Route path="/tenant" element={<TenantDashboard />} />
             <Route path="/tenant/payment-history" element={<PaymentHistory />} />
+            <Route path="/tenant/rent-calculator" element={<RentCalculator />} />
+            <Route path="/tenant/moving-checklist" element={<MovingChecklist />} />
+            <Route path="/tenant/roommate-questionnaire" element={<RoommateQuestionnaire />} />
+            <Route path="/tenant/roommate-matches" element={<RoommateMatches />} />
             <Route path="/saved-searches" element={<SavedSearches />} />
             <Route path="/chat" element={<Chat />} />
+            <Route path="/wishlist" element={<Wishlist />} />
+            <Route path="/shared-wishlist/:userId" element={<SharedWishlist />} />
+            <Route path="/help-center" element={<HelpCenter />} />
+            <Route path="/forum" element={<ForumList />} />
+            <Route path="/forum/:id" element={<ForumPostDetail />} />
           </Routes>
         </Suspense>
       </ErrorBoundary>
       <Chatbot />
       <Joyride
+        run={runTour}
+        steps={steps}
+        continuous
+        showProgress
+        showSkipButton
+        callback={handleJoyrideCallback}
+        styles={{
+          options: {
+            zIndex: 10000,
+          },
+        }}
+      />
+      import LiveChatWidget from './components/LiveChatWidget';
+import FeedbackWidget from './components/FeedbackWidget';
+      </ThemeProvider>
         run={runTour}
         steps={steps}
         continuous

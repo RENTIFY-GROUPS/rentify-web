@@ -26,6 +26,9 @@ const propertySchema = new mongoose.Schema({
   latitude: { type: Number },
   longitude: { type: Number },
   virtualTourUrl: { type: String },
+  isDealOfTheDay: { type: Boolean, default: false },
+  status: { type: String, enum: ['pending', 'approved', 'rejected'], default: 'pending' },
+  flaggedReason: { type: String },
   createdAt: { type: Date, default: Date.now }
 });
 

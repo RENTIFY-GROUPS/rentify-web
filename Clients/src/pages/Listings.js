@@ -1,5 +1,6 @@
 import React, { useState, useEffect, Suspense, lazy } from 'react';
 import PropertyCard from '../components/PropertyCard';
+import PropertyCardSkeleton from '../components/PropertyCardSkeleton';
 import API from '../utils/api';
 import { FaList, FaMap } from 'react-icons/fa';
 
@@ -81,7 +82,7 @@ export default function Listings() {
       setSavedSearchName('');
     } catch (err) {
       console.error('Failed to save search:', err);
-      alert('Failed to save search. Please try again.');
+      toast.error('Failed to save search. Please try again.');
     }
   };
 
@@ -200,7 +201,6 @@ export default function Listings() {
         </button>
       </div>
 
-      {loading && <p className="text-center text-xl text-blue-600">Loading properties...</p>}
       {error && <p className="text-center text-xl text-red-600">{error}</p>}
       {!loading && !error && properties.length === 0 && (
         <p className="text-center text-xl text-gray-600">No properties found matching your criteria.</p>
@@ -208,9 +208,13 @@ export default function Listings() {
 
       {viewMode === 'list' && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {!loading && !error && properties.map(property => (
-            <PropertyCard key={property._id} property={property} />
-          ))}
+          {loading ? (
+            Array.from({ length: 6 }).map((_, index) => <PropertyCardSkeleton key={index} />)
+          ) : (
+            properties.map(property => (
+              <PropertyCard key={property._id} property={property} />
+            ))
+          )}
         </div>
       )}
 

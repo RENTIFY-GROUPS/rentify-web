@@ -16,12 +16,14 @@ export default function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError('');
+    setFormError('');
     try {
-      await register({ name, email, phone, password, role });
+      await register({ name, email, phone, password, role, referralCode });
+      toast.success('Registration successful! Please log in.');
       navigate('/login');
     } catch (err) {
-      setError(err.message || 'Failed to register');
+      setFormError(err.message || 'Failed to register');
+      toast.error(err.message || 'Failed to register');
     } finally {
       setLoading(false);
     }
@@ -114,7 +116,8 @@ export default function Register() {
             <button
               type="button"
               onClick={handleNext}
-              className="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 transition-colors duration-200"
+              className={`w-full bg-blue-600 text-white p-3 rounded-lg ${Object.keys(errors).length > 0 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-700'} transition-colors duration-200`}
+              disabled={Object.keys(errors).length > 0}
             >
               Next
             </button>

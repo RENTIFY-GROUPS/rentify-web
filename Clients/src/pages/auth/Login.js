@@ -47,11 +47,15 @@ export default function Login() {
         <input
           id="password"
           type="password"
-          className="w-full p-2 border border-gray-300 rounded mb-6"
+          className={`w-full p-2 border ${errors.password ? 'border-red-500' : 'border-gray-300'} rounded mb-1`}
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={(e) => {
+            setPassword(e.target.value);
+            setErrors(prev => ({ ...prev, password: null }));
+          }}
           required
         />
+        {errors.password && <p className="text-red-500 text-sm mb-4">{errors.password}</p>}
         <button
           type="submit"
           className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700 disabled:opacity-50"

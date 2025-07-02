@@ -43,6 +43,24 @@ export default function LandlordDashboard() {
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-6 text-primary">Landlord Dashboard</h1>
 
+      <div className="bg-white p-6 rounded-lg shadow-md mb-8">
+        <h2 className="text-2xl font-bold mb-4 text-gray-800">Your Listing Progress</h2>
+        <div className="space-y-4">
+          <div>
+            <p className="font-semibold">Profile Complete: {landlordData.listingProgress.profileComplete ? '✅' : '❌'}</p>
+            <p className="text-sm text-gray-600">Complete your profile information.</p>
+          </div>
+          <div>
+            <p className="font-semibold">KYC Approved: {landlordData.listingProgress.kycApproved ? '✅' : '❌'}</p>
+            <p className="text-sm text-gray-600">Submit your KYC documents for approval.</p>
+          </div>
+          <div>
+            <p className="font-semibold">First Property Listed: {landlordData.listingProgress.firstPropertyListed ? '✅' : '❌'}</p>
+            <p className="text-sm text-gray-600">List your first property to get started.</p>
+          </div>
+        </div>
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         <div className="bg-white p-6 rounded-lg shadow-md">
           <h2 className="text-xl font-semibold mb-3">Total Properties</h2>
@@ -51,6 +69,11 @@ export default function LandlordDashboard() {
         <div className="bg-white p-6 rounded-lg shadow-md">
           <h2 className="text-xl font-semibold mb-3">Total Transactions</h2>
           <p className="text-3xl font-bold text-green-600">{landlordData.transactionHistory.length}</p>
+        </div>
+        <div className="bg-white p-6 rounded-lg shadow-md">
+          <h2 className="text-xl font-semibold mb-3">Your Referral Code</h2>
+          <p className="text-3xl font-bold text-purple-600">{landlordData.referralCode}</p>
+          <p className="text-sm text-gray-600">Share this code with friends to earn rewards!</p>
         </div>
         {/* Add more analytics here */}
       </div>

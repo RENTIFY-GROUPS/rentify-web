@@ -4,6 +4,7 @@ const auth = require('../middleware/auth');
 const multer = require('multer');
 const path = require('path');
 const Property = require('../models/Property');
+const SavedSearch = require('../models/SavedSearch');
 const router = express.Router();
 
 const storage = multer.diskStorage({
@@ -176,6 +177,17 @@ router.post('/', auth, uploadMultiple, [
     });
 
     await property.save();
+
+    // Update landlord's listing progress and award badge
+    const landlord = await User.findById(req.user.id);
+    if (landlord && !landlord.listingProgress.firstPropertyListed) {
+      landlord.listingProgress.firstPropertyListed = true;
+      if (!landlord.badges.includes('First Lister')) {
+        landlord.badges.push('First Lister');
+      }
+      await landlord.save();
+    }
+
     console.log(`Property created by landlord: ${req.user.id}`);
     res.status(201).json(property);
   } catch (err) {
@@ -236,6 +248,50 @@ router.put('/:id', auth, uploadMultiple, [
     await property.save();
     console.log(`Property updated by landlord: ${req.user.id}`);
     res.json(property);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+router.get('/deals-of-the-day', async (req, res) => {
+  try {
+    const deals = await Property.find({ isDealOfTheDay: true })
+      .populate('landlord', 'name email phone')
+      .limit(5); // Limit to 5 deals
+    res.json(deals);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+router.get('/recommendations', auth, async (req, res) => {
+  try {
+    const savedSearches = await SavedSearch.find({ user: req.user.id });
+
+    if (savedSearches.length === 0) {
+      return res.json([]);
+    }
+
+    // Combine filters from all saved searches
+    let combinedQuery = {};
+    savedSearches.forEach(search => {
+      if (search.filters.location) combinedQuery.location = search.filters.location;
+      if (search.filters.minPrice) combinedQuery.price = { ...combinedQuery.price, $gte: search.filters.minPrice };
+      if (search.filters.maxPrice) combinedQuery.price = { ...combinedQuery.price, $lte: search.filters.maxPrice };
+      if (search.filters.bedrooms) combinedQuery.bedrooms = { ...combinedQuery.bedrooms, $gte: search.filters.bedrooms };
+      if (search.filters.propertyType) combinedQuery.propertyType = search.filters.propertyType;
+      if (search.filters.amenities && search.filters.amenities.length > 0) {
+        combinedQuery.amenities = { $all: search.filters.amenities };
+      }
+    });
+
+    const recommendations = await Property.find(combinedQuery)
+      .populate('landlord', 'name email phone')
+      .limit(10); // Limit to 10 recommendations
+
+    res.json(recommendations);
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Server error' });

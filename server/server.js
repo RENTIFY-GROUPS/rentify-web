@@ -56,6 +56,12 @@ app.use('/api/savedSearches', savedSearchesRoutes);
 app.use('/api/conversations', require('./routes/conversations'));
 app.use('/api/payments', require('./routes/payments'));
 app.use('/api/reviews', require('./routes/reviews'));
+app.use('/api/wishlists', require('./routes/wishlists'));
+app.use('/api/roommates', require('./routes/roommates'));
+app.use('/api/forum', require('./routes/forum'));
+app.use('/api/feedback', require('./routes/feedback'));
+app.use('/api/referrals', require('./routes/referrals'));
+app.use('/api/admin', require('./routes/admin'));
 
 // Centralized error handling middleware
 app.use((err, req, res, next) => {

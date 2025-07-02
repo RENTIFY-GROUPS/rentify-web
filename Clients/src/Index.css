@@ -1,3 +1,392 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-gray-100 text-gray-900;
+  }
+  .dark body {
+    @apply bg-gray-900 text-gray-100;
+  }
+  .dark .bg-white {
+    @apply bg-gray-800;
+  }
+  .dark .text-gray-800 {
+    @apply text-gray-200;
+  }
+  .dark .text-gray-700 {
+    @apply text-gray-300;
+  }
+  .dark .border-gray-300 {
+    @apply border-gray-600;
+  }
+  .dark .shadow-md {
+    @apply shadow-lg;
+  }
+  .dark .bg-yellow-50 {
+    @apply bg-yellow-900;
+  }
+  .dark .border-yellow-200 {
+    @apply border-yellow-700;
+  }
+  .dark .text-yellow-800 {
+    @apply text-yellow-200;
+  }
+  .dark .text-yellow-700 {
+    @apply text-yellow-300;
+  }
+  .dark .bg-red-100 {
+    @apply bg-red-900;
+  }
+  .dark .border-red-500 {
+    @apply border-red-700;
+  }
+  .dark .text-red-700 {
+    @apply text-red-300;
+  }
+  .dark .bg-blue-50 {
+    @apply bg-blue-900;
+  }
+  .dark .text-blue-600 {
+    @apply text-blue-400;
+  }
+  .dark .text-green-600 {
+    @apply text-green-400;
+  }
+  .dark .text-red-600 {
+    @apply text-red-400;
+  }
+  .dark .text-gray-600 {
+    @apply text-gray-400;
+  }
+  .dark .text-gray-500 {
+    @apply text-gray-500;
+  }
+  .dark .text-gray-900 {
+    @apply text-gray-100;
+  }
+  .dark .bg-gray-100 {
+    @apply bg-gray-800;
+  }
+  .dark .bg-gray-200 {
+    @apply bg-gray-700;
+  }
+  .dark .hover\:bg-gray-300:hover {
+    @apply hover:bg-gray-600;
+  }
+  .dark .bg-gray-50 {
+    @apply bg-gray-800;
+  }
+  .dark .divide-gray-200 > :not([hidden]) ~ :not([hidden]) {
+    border-color: #4a5568; /* gray-700 */
+  }
+  .dark .bg-blue-600 {
+    @apply bg-blue-800;
+  }
+  .dark .hover\:bg-blue-700:hover {
+    @apply hover:bg-blue-900;
+  }
+  .dark .bg-green-500 {
+    @apply bg-green-700;
+  }
+  .dark .hover\:bg-green-600:hover {
+    @apply hover:bg-green-800;
+  }
+  .dark .bg-red-500 {
+    @apply bg-red-700;
+  }
+  .dark .hover\:bg-red-600:hover {
+    @apply hover:bg-red-800;
+  }
+  .dark .bg-purple-600 {
+    @apply bg-purple-800;
+  }
+  .dark .hover\:bg-purple-700:hover {
+    @apply hover:bg-purple-900;
+  }
+  .dark .bg-gray-300 {
+    @apply bg-gray-700;
+  }
+  .dark .bg-gray-400 {
+    @apply bg-gray-600;
+  }
+  .dark .bg-gray-600 {
+    @apply bg-gray-700;
+  }
+  .dark .bg-gray-800 {
+    @apply bg-gray-900;
+  }
+  .dark .bg-gray-900 {
+    @apply bg-gray-800;
+  }
+  .dark .text-primary {
+    @apply text-blue-300;
+  }
+  .dark .text-accent {
+    @apply text-gray-300;
+  }
+  .dark .bg-accent {
+    @apply bg-gray-700;
+  }
+  .dark .border-primary {
+    @apply border-blue-700;
+  }
+  .dark .hover\:bg-secondary:hover {
+    @apply hover:bg-yellow-600;
+  }
+  .dark .text-red-500 {
+    @apply text-red-400;
+  }
+  .dark .border-red-500 {
+    @apply border-red-600;
+  }
+  .dark .bg-red-100 {
+    @apply bg-red-900;
+  }
+  .dark .text-red-600 {
+    @apply text-red-400;
+  }
+  .dark .bg-blue-100 {
+    @apply bg-blue-900;
+  }
+  .dark .border-blue-500 {
+    @apply border-blue-700;
+  }
+  .dark .text-blue-700 {
+    @apply text-blue-300;
+  }
+  .dark .bg-blue-500 {
+    @apply bg-blue-700;
+  }
+  .dark .hover\:bg-blue-700:hover {
+    @apply hover:bg-blue-900;
+  }
+  .dark .bg-purple-600 {
+    @apply bg-purple-800;
+  }
+  .dark .hover\:bg-purple-700:hover {
+    @apply hover:bg-purple-900;
+  }
+  .dark .bg-green-500 {
+    @apply bg-green-700;
+  }
+  .dark .hover\:bg-green-600:hover {
+    @apply hover:bg-green-800;
+  }
+  .dark .bg-gray-500 {
+    @apply bg-gray-700;
+  }
+  .dark .hover\:bg-gray-700:hover {
+    @apply hover:bg-gray-900;
+  }
+  .dark .focus\:ring-blue-400:focus {
+    --tw-ring-color: #60a5fa; /* blue-400 */
+  }
+  .dark .focus\:border-blue-400:focus {
+    border-color: #60a5fa; /* blue-400 */
+  }
+  .dark .focus\:ring-blue-500:focus {
+    --tw-ring-color: #3b82f6; /* blue-500 */
+  }
+  .dark .focus\:border-blue-500:focus {
+    border-color: #3b82f6; /* blue-500 */
+  }
+  .dark .focus\:ring-blue-600:focus {
+    --tw-ring-color: #2563eb; /* blue-600 */
+  }
+  .dark .focus\:border-blue-600:focus {
+    border-color: #2563eb; /* blue-600 */
+  }
+  .dark .focus\:ring-blue-700:focus {
+    --tw-ring-color: #1d4ed8; /* blue-700 */
+  }
+  .dark .focus\:border-blue-700:focus {
+    border-color: #1d4ed8; /* blue-700 */
+  }
+  .dark .focus\:ring-blue-800:focus {
+    --tw-ring-color: #1e40af; /* blue-800 */
+  }
+  .dark .focus\:border-blue-800:focus {
+    border-color: #1e40af; /* blue-800 */
+  }
+  .dark .focus\:ring-blue-900:focus {
+    --tw-ring-color: #1e3a8a; /* blue-900 */
+  }
+  .dark .focus\:border-blue-900:focus {
+    border-color: #1e3a8a; /* blue-900 */
+  }
+
+  /* High Contrast Mode */
+  .high-contrast body {
+    @apply bg-hc-bg text-hc-text;
+  }
+  .high-contrast .bg-white {
+    @apply bg-hc-bg;
+  }
+  .high-contrast .text-gray-800 {
+    @apply text-hc-text;
+  }
+  .high-contrast .text-gray-700 {
+    @apply text-hc-text;
+  }
+  .high-contrast .border-gray-300 {
+    @apply border-hc-primary;
+  }
+  .high-contrast .shadow-md {
+    @apply shadow-none;
+  }
+  .high-contrast .bg-blue-600 {
+    @apply bg-hc-primary text-hc-bg;
+  }
+  .high-contrast .hover\:bg-blue-700:hover {
+    @apply bg-hc-secondary;
+  }
+  .high-contrast .bg-green-500 {
+    @apply bg-hc-primary text-hc-bg;
+  }
+  .high-contrast .hover\:bg-green-600:hover {
+    @apply bg-hc-secondary;
+  }
+  .high-contrast .bg-red-500 {
+    @apply bg-hc-accent text-hc-bg;
+  }
+  .high-contrast .hover\:bg-red-600:hover {
+    @apply bg-hc-secondary;
+  }
+  .high-contrast .bg-purple-600 {
+    @apply bg-hc-primary text-hc-bg;
+  }
+  .high-contrast .hover\:bg-purple-700:hover {
+    @apply bg-hc-secondary;
+  }
+  .high-contrast .bg-gray-100 {
+    @apply bg-hc-bg;
+  }
+  .high-contrast .bg-gray-200 {
+    @apply bg-hc-bg;
+  }
+  .high-contrast .hover\:bg-gray-300:hover {
+    @apply bg-hc-secondary;
+  }
+  .high-contrast .bg-gray-50 {
+    @apply bg-hc-bg;
+  }
+  .high-contrast .divide-gray-200 > :not([hidden]) ~ :not([hidden]) {
+    border-color: theme('colors.hc-primary');
+  }
+  .high-contrast .text-blue-600 {
+    @apply text-hc-primary;
+  }
+  .high-contrast .text-green-600 {
+    @apply text-hc-primary;
+  }
+  .high-contrast .text-red-600 {
+    @apply text-hc-accent;
+  }
+  .high-contrast .text-gray-600 {
+    @apply text-hc-text;
+  }
+  .high-contrast .text-gray-500 {
+    @apply text-hc-text;
+  }
+  .high-contrast .text-gray-900 {
+    @apply text-hc-text;
+  }
+  .high-contrast .text-primary {
+    @apply text-hc-primary;
+  }
+  .high-contrast .text-accent {
+    @apply text-hc-accent;
+  }
+  .high-contrast .bg-accent {
+    @apply bg-hc-bg;
+  }
+  .high-contrast .border-primary {
+    @apply border-hc-primary;
+  }
+  .high-contrast .hover\:bg-secondary:hover {
+    @apply bg-hc-secondary;
+  }
+  .high-contrast .text-red-500 {
+    @apply text-hc-accent;
+  }
+  .high-contrast .border-red-500 {
+    @apply border-hc-accent;
+  }
+  .high-contrast .bg-red-100 {
+    @apply bg-hc-bg;
+  }
+  .high-contrast .text-red-700 {
+    @apply text-hc-accent;
+  }
+  .high-contrast .bg-blue-100 {
+    @apply bg-hc-bg;
+  }
+  .high-contrast .border-blue-500 {
+    @apply border-hc-primary;
+  }
+  .high-contrast .text-blue-700 {
+    @apply text-hc-primary;
+  }
+  .high-contrast .bg-blue-500 {
+    @apply bg-hc-primary;
+  }
+  .high-contrast .hover\:bg-blue-700:hover {
+    @apply bg-hc-secondary;
+  }
+  .high-contrast .bg-purple-600 {
+    @apply bg-hc-primary;
+  }
+  .high-contrast .hover\:bg-purple-700:hover {
+    @apply bg-hc-secondary;
+  }
+  .high-contrast .bg-green-500 {
+    @apply bg-hc-primary;
+  }
+  .high-contrast .hover\:bg-green-600:hover {
+    @apply bg-hc-secondary;
+  }
+  .high-contrast .bg-gray-500 {
+    @apply bg-hc-primary;
+  }
+  .high-contrast .hover\:bg-gray-700:hover {
+    @apply bg-hc-secondary;
+  }
+  .high-contrast .focus\:ring-blue-400:focus {
+    --tw-ring-color: theme('colors.hc-primary');
+  }
+  .high-contrast .focus\:border-blue-400:focus {
+    border-color: theme('colors.hc-primary');
+  }
+  .high-contrast .focus\:ring-blue-500:focus {
+    --tw-ring-color: theme('colors.hc-primary');
+  }
+  .high-contrast .focus\:border-blue-500:focus {
+    border-color: theme('colors.hc-primary');
+  }
+  .high-contrast .focus\:ring-blue-600:focus {
+    --tw-ring-color: theme('colors.hc-primary');
+  }
+  .high-contrast .focus\:border-blue-600:focus {
+    border-color: theme('colors.hc-primary');
+  }
+  .high-contrast .focus\:ring-blue-700:focus {
+    --tw-ring-color: theme('colors.hc-primary');
+  }
+  .high-contrast .focus\:border-blue-700:focus {
+    border-color: theme('colors.hc-primary');
+  }
+  .high-contrast .focus\:ring-blue-800:focus {
+    --tw-ring-color: theme('colors.hc-primary');
+  }
+  .high-contrast .focus\:border-blue-800:focus {
+    border-color: theme('colors.hc-primary');
+  }
+  .high-contrast .focus\:ring-blue-900:focus {
+    --tw-ring-color: theme('colors.hc-primary');
+  }
+  .high-contrast .focus\:border-blue-900:focus {
+    border-color: theme('colors.hc-primary');
+  }
+}
