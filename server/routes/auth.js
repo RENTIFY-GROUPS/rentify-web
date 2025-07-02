@@ -218,12 +218,7 @@ router.post('/google-login', async (req, res) => {
 });
 
 
-// Middleware to protect routes (assuming it exists or will be created)
-const authMiddleware = (req, res, next) => {
-  // Implement your authentication middleware here
-  // For now, a placeholder that allows all requests
-  next();
-};
+
 
 // 2FA Setup - Generate secret and QR code
 router.post('/2fa/setup', authMiddleware, async (req, res) => {
