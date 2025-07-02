@@ -66,7 +66,6 @@ const userSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
   isAdmin: { type: Boolean, default: false }
 });
-});
 
 // Generate referral code before saving (if not already present)
 userSchema.pre('save', async function(next) {
