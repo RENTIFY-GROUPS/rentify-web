@@ -10,23 +10,11 @@ const qrcode = require('qrcode');
 const sendEmail = require('../utils/email');
 const crypto = require('crypto');
 const sendSms = require('../utils/sms');
+const { auth: authMiddleware } = require('../middleware/auth');
 
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
-// Middleware to protect routes
-const authMiddleware = (req, res, next) => {
-  const token = req.header('x-auth-token');
-  if (!token) {
-    return res.status(401).json({ message: 'No token, authorization denied' });
-  }
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded;
-    next();
-  } catch (err) {
-    res.status(401).json({ message: 'Token is not valid' });
-  }
-};
+
 
 
 // Register
