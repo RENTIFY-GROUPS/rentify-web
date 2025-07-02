@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const Transaction = require('../models/Transaction');
-const authMiddleware = require('../middleware/auth');
+const { auth } = require('../middleware/auth');
 
 // Create a new transaction
-router.post('/', authMiddleware, async (req, res) => {
+router.post('/', auth, async (req, res) => {
   try {
     const { property, buyer, seller, amount } = req.body;
 
@@ -19,7 +19,7 @@ router.post('/', authMiddleware, async (req, res) => {
 });
 
 // Get transactions for a user
-router.get('/user/:userId', authMiddleware, async (req, res) => {
+router.get('/user/:userId', auth, async (req, res) => {
   try {
     const transactions = await Transaction.find({
       $or: [{ buyer: req.params.userId }, { seller: req.params.userId }]
@@ -32,7 +32,7 @@ router.get('/user/:userId', authMiddleware, async (req, res) => {
 });
 
 // Update transaction status
-router.put('/:id/status', authMiddleware, async (req, res) => {
+router.put('/:id/status', auth, async (req, res) => {
   try {
     const { status, paymentStatus } = req.body;
     const transaction = await Transaction.findById(req.params.id);
