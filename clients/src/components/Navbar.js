@@ -4,7 +4,7 @@ import { getCurrentUser, logout } from '../utils/auth';
 import { useTheme } from '../context/ThemeContext';
 import { useTranslation } from 'react-i18next';
 import { FaMoon, FaSun, FaAdjust, FaBars, FaTimes } from 'react-icons/fa';
-import i18n from '../i18n';
+import i18n from './i18n';
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
