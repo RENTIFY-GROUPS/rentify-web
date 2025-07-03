@@ -59,7 +59,7 @@ router.put('/properties/:id/flag', auth, adminAuth, async (req, res) => {
 });
 
 // Get all users (for admin management)
-router.get('/users', auth, adminAuth, async (req, res) => {
+router.get('/users', auth, adminAuthMiddleware, async (req, res) => {
   try {
     const users = await User.find().select('-password');
     res.json(users);

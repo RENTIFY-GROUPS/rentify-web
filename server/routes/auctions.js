@@ -4,7 +4,7 @@ const Auction = require('../models/Auction');
 const { auth } = require('../middleware/auth');
 
 // Create a new auction
-router.post('/', authMiddleware, async (req, res) => {
+router.post('/', auth, async (req, res) => {
   try {
     const { property, startingPrice, startTime, endTime } = req.body;
     const seller = req.user.id;
