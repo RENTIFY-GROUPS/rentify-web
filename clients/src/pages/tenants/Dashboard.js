@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import CheckoutForm from '../../components/CheckoutForm';
-import Modal from '../../components/Modal';
+import CheckoutForm from '../components/CheckoutForm';
+import Modal from '../components/Modal';
 import API from '../utils/api';
 import { toast } from 'react-toastify';
 

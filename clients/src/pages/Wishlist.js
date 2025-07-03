@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import API from '../utils/api';
-import PropertyCard from '../../components/PropertyCard';
+import PropertyCard from '../components/PropertyCard';
 import { toast } from 'react-toastify';
 
 export default function Wishlist() {
