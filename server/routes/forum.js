@@ -1,5 +1,5 @@
 const express = require('express');
-const auth = require('../middleware/auth');
+const { auth } = require('../middleware/auth');
 const { body, validationResult } = require('express-validator');
 const ForumPost = require('../models/ForumPost');
 const ForumComment = require('../models/ForumComment');

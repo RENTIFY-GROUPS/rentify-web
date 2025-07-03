@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Auction = require('../models/Auction');
-const authMiddleware = require('../middleware/auth');
+const { auth } = require('../middleware/auth');
 
 // Create a new auction
 router.post('/', authMiddleware, async (req, res) => {
@@ -34,7 +34,7 @@ router.get('/ongoing', async (req, res) => {
 });
 
 // Place a bid
-router.post('/:id/bid', authMiddleware, async (req, res) => {
+router.post('/:id/bid', auth, async (req, res) => {
   try {
     const auction = await Auction.findById(req.params.id);
     if (!auction) {

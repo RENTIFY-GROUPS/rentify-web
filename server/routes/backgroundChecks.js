@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const BackgroundCheck = require('../models/BackgroundCheck');
-const authMiddleware = require('../middleware/auth');
+const { auth } = require('../middleware/auth');
 
 // Request a background check
 router.post('/', authMiddleware, async (req, res) => {
@@ -24,7 +24,7 @@ router.post('/', authMiddleware, async (req, res) => {
 });
 
 // Get background check status for a user
-router.get('/user/:userId', authMiddleware, async (req, res) => {
+router.get('/user/:userId', auth, async (req, res) => {
   try {
     if (req.user.id !== req.params.userId) {
       return res.status(403).json({ message: 'Unauthorized' });

@@ -20,6 +20,8 @@ console.log('propertyRoutes type:', typeof propertyRoutes);
 console.log('profileRoutes type:', typeof profileRoutes);
 
 const app = express();
+const http = require('http').Server(app); // Initialize http server
+const io = require('socket.io')(http); // Initialize socket.io
 
 // Middleware
 app.use(cors());
@@ -76,9 +78,6 @@ app.get('/', (req, res) => {
 });
 
 const PORT = process.env.PORT || 5000;
-http.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
 
 io.on('connection', (socket) => {
   console.log('a user connected');
@@ -98,4 +97,19 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     console.log('user disconnected');
   });
+});
+
+
+// Connect to MongoDB
+mongoose.connect(process.env.MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => {
+  console.log('MongoDB connected');
+  http.listen(PORT, () => console.log(`Server running on port ${PORT}`)); // Use http.listen
+})
+.catch(err => {
+  console.error('MongoDB connection error:', err);
+  process.exit(1);
 });

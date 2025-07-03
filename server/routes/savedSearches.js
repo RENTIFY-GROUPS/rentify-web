@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const SavedSearch = require('../models/SavedSearch');
-const auth = require('../middleware/auth');
+const { auth } = require('../middleware/auth');
 
 // @route   POST api/savedSearches
 // @desc    Save a new search

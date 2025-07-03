@@ -1,5 +1,5 @@
 const express = require('express');
-const auth = require('../middleware/auth');
+const { auth, adminAuth: adminAuthMiddleware } = require('../middleware/auth');
 const Property = require('../models/Property');
 const User = require('../models/User');
 const router = express.Router();
@@ -70,7 +70,7 @@ router.get('/users', auth, adminAuth, async (req, res) => {
 });
 
 // Toggle user admin status
-router.put('/users/:id/toggle-admin', auth, adminAuth, async (req, res) => {
+router.put('/users/:id/toggle-admin', auth, adminAuthMiddleware, async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
     if (!user) {
