@@ -81,6 +81,9 @@ function App() {
     <Router>
       <I18nextProvider i18n={i18n}>
       <ThemeProvider>
+        <Navbar />
+      <I18nextProvider i18n={i18n}>
+      <ThemeProvider>
         <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
         <ErrorBoundary>
           <Suspense fallback={<div>Loading...</div>}>
@@ -126,6 +129,8 @@ function App() {
           }}
         />
       </ThemeProvider>
+      </I18nextProvider>
+      </I18nextProvider>
     </Router>
   );
 }

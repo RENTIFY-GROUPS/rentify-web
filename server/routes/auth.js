@@ -11,8 +11,18 @@ const sendEmail = require('../utils/email');
 const crypto = require('crypto');
 const sendSms = require('../utils/sms');
 const { auth: authMiddleware } = require('../middleware/auth');
+const rateLimit = require('express-rate-limit');
 
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5, // Limit each IP to 5 login requests per `window` per 15 minutes
+  message:
+    'Too many login attempts from this IP, please try again after 15 minutes',
+  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+});
 
 
 
@@ -42,10 +52,17 @@ router.post('/register', [
 
     let referredByUser = null;
     if (referralCode) {
+      if (referralCode.trim() === '') {
+        return res.status(400).json({ message: 'Referral code cannot be empty' });
+      }
       referredByUser = await User.findOne({ referralCode });
       if (!referredByUser) {
         return res.status(400).json({ message: 'Invalid referral code' });
       }
+      // Optional: Prevent self-referral, though unlikely during initial registration
+      // if (referredByUser.email === email) {
+      //   return res.status(400).json({ message: 'Cannot refer yourself' });
+      // }
     }
 
     // Create new user
@@ -74,7 +91,7 @@ router.post('/register', [
 });
 
 // Login
-router.post('/login', [
+router.post('/login', loginLimiter, [
   body('email').isEmail().withMessage('Valid email is required'),
   body('password').notEmpty().withMessage('Password is required')
 ], async (req, res) => {

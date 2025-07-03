@@ -1,6 +1,10 @@
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { getCurrentUser, logout } from '../utils/auth';
+import { useTheme } from '../context/ThemeContext';
+import { useTranslation } from 'react-i18next';
+import { FaMoon, FaSun, FaAdjust, FaBars, FaTimes } from 'react-icons/fa';
+import i18n from '../i18n';
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -52,15 +56,15 @@ export default function Navbar() {
             </select>
           </>
         </div>
-        <div className="sm:hidden">
+        <div className="sm:hidden flex items-center">
           <button onClick={toggleTheme} className="text-white mr-4" title={theme === 'light' ? t('toggle_dark_mode') : t('toggle_light_mode')}>
             {theme === 'light' ? <FaMoon size={20} /> : <FaSun size={20} />}
           </button>
           <button onClick={toggleHighContrast} className="text-white mr-2" title="Toggle High Contrast">
             <FaAdjust size={20} />
           </button>
-          <button onClick={toggleHighContrast} className="text-white mr-2" title="Toggle High Contrast">
-            <FaAdjust size={20} />
+          <button onClick={() => setMenuOpen(!menuOpen)} className="text-white focus:outline-none">
+            {menuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
           </button>
         </div>
       </div>

@@ -14,6 +14,7 @@ const auctionsRoutes = require('./routes/auctions');
 const backgroundChecksRoutes = require('./routes/backgroundChecks');
 const savedSearchesRoutes = require('./routes/savedSearches');
 const referralsRoutes = require('./routes/referrals');
+const Message = require('./models/Message');
 
 console.log('authRoutes type:', typeof authRoutes);
 console.log('propertyRoutes type:', typeof propertyRoutes);
@@ -68,7 +69,9 @@ app.use('/api/admin', require('./routes/admin'));
 
 // Centralized error handling middleware
 app.use((err, req, res, next) => {
-  console.error(err.stack);
+  console.error(`Error: ${err.message}
+Request: ${req.method} ${req.originalUrl}
+Stack: ${err.stack}`);
   res.status(err.status || 500).json({ message: err.message || 'Internal Server Error' });
 });
 
