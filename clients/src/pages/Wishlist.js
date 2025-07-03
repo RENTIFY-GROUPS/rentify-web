@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import API from '../../utils/api';
+import API from '../utils/api';
 import PropertyCard from '../../components/PropertyCard';
 import { toast } from 'react-toastify';
 

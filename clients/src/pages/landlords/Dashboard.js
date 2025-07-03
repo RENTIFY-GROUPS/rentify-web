@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import api from '../../utils/api';
+import api from '../utils/api';
 import PropertyCard from '../../components/PropertyCard';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';

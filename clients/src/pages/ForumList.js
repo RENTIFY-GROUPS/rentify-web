@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import API from '../../utils/api';
+import API from '../utils/api';
 import { toast } from 'react-toastify';
 
 export default function ForumList() {

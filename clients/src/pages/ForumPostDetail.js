@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import API from '../../utils/api';
+import API from '../utils/api';
 import { toast } from 'react-toastify';
 import { isAuthenticated } from '../../utils/auth';
 

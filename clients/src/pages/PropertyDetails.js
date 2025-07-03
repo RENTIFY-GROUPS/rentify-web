@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { useParams } from 'react-router-dom';
-import API from '../../utils/api';
+import API from '../utils/api';
 import PropertyCard from '../../components/PropertyCard';
 import ReviewForm from '../../components/ReviewForm';
 import { isAuthenticated } from '../../utils/auth';
