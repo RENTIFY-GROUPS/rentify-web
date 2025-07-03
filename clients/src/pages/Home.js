@@ -1,6 +1,7 @@
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 const PropertyCard = lazy(() => import('../components/PropertyCard'));
 import API from '../utils/api';
+import { isAuthenticated } from '../utils/auth';
 
 // Hero Section Component
 const Hero = ({ onSearch }) => (

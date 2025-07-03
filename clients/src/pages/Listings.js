@@ -3,6 +3,7 @@ import PropertyCard from '../components/PropertyCard';
 import PropertyCardSkeleton from '../components/PropertyCardSkeleton';
 import API from '../utils/api';
 import { FaList, FaMap } from 'react-icons/fa';
+import { toast } from 'react-toastify';
 
 const MapComponent = lazy(() => import('../components/MapComponent'));
 

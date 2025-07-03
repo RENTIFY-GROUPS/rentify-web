@@ -6,6 +6,7 @@ import API from '../../utils/api';
 import PropertyCard from '../../components/PropertyCard';
 import ReviewForm from '../../components/ReviewForm';
 import { isAuthenticated } from '../../utils/auth';
+import TextToSpeechButton from '../components/TextToSpeechButton';
 
 export default function PropertyDetails() {
   const { id } = useParams();

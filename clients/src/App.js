@@ -6,7 +6,7 @@ import Chatbot from './components/Chatbot';
 import Joyride from 'react-joyride';
 import { I18nextProvider } from 'react-i18next';
 import i18n from './i18n';
-import { ThemeProvider } from '../context/ThemeContext';
+import { ThemeProvider } from './context/ThemeContext';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import LiveChatWidget from './components/LiveChatWidget';

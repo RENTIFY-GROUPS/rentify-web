@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { getCurrentUser, logout } from '../utils/auth';
-import { useTheme } from '../context/ThemeContext';
+import { useTheme } from './context/ThemeContext';
 import { useTranslation } from 'react-i18next';
 import { FaMoon, FaSun, FaAdjust, FaBars, FaTimes } from 'react-icons/fa';
 import i18n from './i18n';

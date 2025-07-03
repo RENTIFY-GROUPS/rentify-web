@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { register } from '../../utils/auth';
+import { toast } from 'react-toastify';
 
 export default function Register() {
   const [step, setStep] = useState(1);
@@ -12,6 +13,7 @@ export default function Register() {
   const [referralCode, setReferralCode] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [formError, setFormError] = useState('');
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -117,8 +119,8 @@ export default function Register() {
             <button
               type="button"
               onClick={handleNext}
-              className={`w-full bg-blue-600 text-white p-3 rounded-lg ${Object.keys(errors).length > 0 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-700'} transition-colors duration-200`}
-              disabled={Object.keys(errors).length > 0}
+              className={`w-full bg-blue-600 text-white p-3 rounded-lg ${formError ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-700'} transition-colors duration-200`}
+              disabled={formError}
             >
               Next
             </button>

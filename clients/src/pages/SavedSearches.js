@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import API from '../../utils/api';
 import { FaTrash, FaSearch } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 export default function SavedSearches() {
   const [savedSearches, setSavedSearches] = useState([]);
