@@ -16,7 +16,7 @@ export default function TenantDashboard() {
     try {
       const response = await API.post('/referrals/claim-credit');
       toast.success(response.data.message);
-      setReferralCredit(0); // Reset credit after claiming
+      setReferralCredit(0); 
     } catch (err) {
       console.error('Error claiming referral credit:', err);
       toast.error(err.response?.data?.message || 'Failed to claim referral credit.');
@@ -126,7 +126,6 @@ export default function TenantDashboard() {
           )}
         </div>
       <div className="bg-white p-6 rounded-lg shadow-md">
-        <div className="bg-white p-6 rounded-lg shadow-md">
           <h2 className="text-xl font-semibold mb-3">Rent Affordability Calculator</h2>
           <p className="text-gray-600 mb-4">Calculate your affordable rent based on your income.</p>
           <Link to="/tenant/rent-calculator" className="text-blue-600 hover:underline font-medium">Use Calculator</Link>
@@ -141,9 +140,7 @@ export default function TenantDashboard() {
           <p className="text-gray-600 mb-4">Find compatible roommates based on your preferences.</p>
           <Link to="/tenant/roommate-questionnaire" className="text-blue-600 hover:underline font-medium">Create Profile</Link>
           <Link to="/tenant/roommate-matches" className="ml-4 text-blue-600 hover:underline font-medium">View Matches</Link>
-        </div>
-      </div>
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <CheckoutForm amount={1000} propertyId="some-property-id" landlordId="some-landlord-id" />
       </Modal>
     </div>
