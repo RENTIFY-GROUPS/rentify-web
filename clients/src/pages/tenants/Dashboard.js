@@ -126,7 +126,7 @@ export default function TenantDashboard() {
           )}
         </div>
       <div className="bg-white p-6 rounded-lg shadow-md">
-          <div className="bg-white p-6 rounded-lg shadow-md">
+        <div className="bg-white p-6 rounded-lg shadow-md">
           <h2 className="text-xl font-semibold mb-3">Rent Affordability Calculator</h2>
           <p className="text-gray-600 mb-4">Calculate your affordable rent based on your income.</p>
           <Link to="/tenant/rent-calculator" className="text-blue-600 hover:underline font-medium">Use Calculator</Link>
