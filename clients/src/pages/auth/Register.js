@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { register } from '../utils/auth';
+import { register } from '../../utils/auth';
 import { toast } from 'react-toastify';
 
 export default function Register() {

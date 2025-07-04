@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { login, verify2fa } from '../utils/auth';
 import { toast } from 'react-toastify';
+import API from '../../utils/api';
 
 export default function Login() {
   const [email, setEmail] = useState('');
