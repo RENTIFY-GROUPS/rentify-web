@@ -26,6 +26,13 @@ const SavedSearches = lazy(() => import('./pages/SavedSearches'));
 const Chat = lazy(() => import('./components/messaging/Chat'));
 const TwoFactorAuth = lazy(() => import('./pages/auth/TwoFactorAuth'));
 const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
+const RoommateQuestionnaire = lazy(() => import('./pages/tenants/RoommateQuestionnaire'));
+const RoommateMatches = lazy(() => import('./pages/tenants/RoommateMatches'));
+const Wishlist = lazy(() => import('./pages/Wishlist'));
+const SharedWishlist = lazy(() => import('./pages/SharedWishlist'));
+const HelpCenter = lazy(() => import('./pages/HelpCenter'));
+const ForumList = lazy(() => import('./pages/forum/ForumList'));
+const ForumPostDetail = lazy(() => import('./pages/forum/ForumPostDetail'));
 
 function App() {
   const [runTour, setRunTour] = useState(false);
