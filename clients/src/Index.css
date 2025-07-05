@@ -61,22 +61,22 @@
     @apply text-gray-400;
   }
   .dark .text-gray-500 {
-    @apply text-gray-500;
+    @apply text-gray-400;
   }
   .dark .text-gray-900 {
     @apply text-gray-100;
   }
   .dark .bg-gray-100 {
-    @apply bg-gray-800;
+    background-color: #1f2937;
   }
   .dark .bg-gray-200 {
-    @apply bg-gray-700;
+    background-color: #374151;
   }
   .dark .hover\:bg-gray-300:hover {
-    @apply hover:bg-gray-600;
+    background-color: #4b5563;
   }
   .dark .bg-gray-50 {
-    @apply bg-gray-800;
+    background-color: #1f2937;
   }
   .dark .divide-gray-200 > :not([hidden]) ~ :not([hidden]) {
     border-color: #4a5568; /* gray-700 */
@@ -106,19 +106,10 @@
     @apply hover:bg-purple-900;
   }
   .dark .bg-gray-300 {
-    @apply bg-gray-700;
+    background-color: #374151;
   }
   .dark .bg-gray-400 {
-    @apply bg-gray-600;
-  }
-  .dark .bg-gray-600 {
-    @apply bg-gray-700;
-  }
-  .dark .bg-gray-800 {
-    @apply bg-gray-900;
-  }
-  .dark .bg-gray-900 {
-    @apply bg-gray-800;
+    background-color: #4b5563;
   }
   .dark .text-primary {
     @apply text-blue-300;
@@ -135,50 +126,11 @@
   .dark .hover\:bg-secondary:hover {
     @apply hover:bg-yellow-600;
   }
-  .dark .text-red-500 {
-    @apply text-red-400;
-  }
-  .dark .border-red-500 {
-    @apply border-red-600;
-  }
-  .dark .bg-red-100 {
-    @apply bg-red-900;
-  }
-  .dark .text-red-600 {
-    @apply text-red-400;
-  }
-  .dark .bg-blue-100 {
-    @apply bg-blue-900;
-  }
-  .dark .border-blue-500 {
-    @apply border-blue-700;
-  }
-  .dark .text-blue-700 {
-    @apply text-blue-300;
-  }
-  .dark .bg-blue-500 {
-    @apply bg-blue-700;
-  }
-  .dark .hover\:bg-blue-700:hover {
-    @apply hover:bg-blue-900;
-  }
-  .dark .bg-purple-600 {
-    @apply bg-purple-800;
-  }
-  .dark .hover\:bg-purple-700:hover {
-    @apply hover:bg-purple-900;
-  }
-  .dark .bg-green-500 {
-    @apply bg-green-700;
-  }
-  .dark .hover\:bg-green-600:hover {
-    @apply hover:bg-green-800;
-  }
   .dark .bg-gray-500 {
-    @apply bg-gray-700;
+    background-color: #6b7280;
   }
   .dark .hover\:bg-gray-700:hover {
-    @apply hover:bg-gray-900;
+    background-color: #111827;
   }
   .dark .focus\:ring-blue-400:focus {
     --tw-ring-color: #60a5fa; /* blue-400 */

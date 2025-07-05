@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
-import nacl from 'tweetnacl';
-import naclUtil from 'tweetnacl-util';
-import { FaPaperclip, FaCheckDouble } from 'react-icons/fa'; // Import icons
+import React, { useState, useEffect, useRef } from "react";
+import nacl from "tweetnacl";
+import naclUtil from "tweetnacl-util";
+import { FaPaperclip, FaCheckDouble } from "react-icons/fa";
 
 // Utility functions for encryption/decryption
 const generateKeyPair = () => {
@@ -24,10 +24,10 @@ const decryptMessage = (encryptedMessage, nonce, publicKey, secretKey) => {
 const Chat = () => {
   const [messages, setMessages] = useState(() => {
     // Load messages from localStorage
-    const saved = localStorage.getItem('chatMessages');
+    const saved = localStorage.getItem("chatMessages");
     return saved ? JSON.parse(saved) : [];
   });
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
   const [keyPair, setKeyPair] = useState(null);
   const [peerPublicKey, setPeerPublicKey] = useState(null);
   const messagesEndRef = useRef(null);
@@ -44,50 +44,65 @@ const Chat = () => {
   useEffect(() => {
     // Scroll to bottom on new message
     if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
     // Save messages to localStorage
-    localStorage.setItem('chatMessages', JSON.stringify(messages));
+    localStorage.setItem("chatMessages", JSON.stringify(messages));
   }, [messages]);
 
   const handleSend = () => {
     if (!input.trim() || !keyPair || !peerPublicKey) return;
 
     const nonce = nacl.randomBytes(nacl.box.nonceLength);
-    const encrypted = encryptMessage(input, nonce, peerPublicKey, keyPair.secretKey);
+    const encrypted = encryptMessage(
+      input,
+      nonce,
+      peerPublicKey,
+      keyPair.secretKey
+    );
 
     const newMessage = {
       id: Date.now(),
       encryptedMessage: encrypted,
       nonce: naclUtil.encodeBase64(nonce),
-      sender: 'me',
+      sender: "me",
       timestamp: new Date().toISOString(),
       read: false, // Added for read receipts
     };
 
-    setMessages(prev => [...prev, newMessage]);
-    setInput('');
+    setMessages((prev) => [...prev, newMessage]);
+    setInput("");
   };
 
   const handleFileAttach = () => {
     // Placeholder for file attachment logic
     const newMessage = {
       id: Date.now(),
-      encryptedMessage: encryptMessage('[File Attached: lease_draft.pdf]', nacl.randomBytes(nacl.box.nonceLength), peerPublicKey, keyPair.secretKey),
+      encryptedMessage: encryptMessage(
+        "[File Attached: lease_draft.pdf]",
+        nacl.randomBytes(nacl.box.nonceLength),
+        peerPublicKey,
+        keyPair.secretKey
+      ),
       nonce: naclUtil.encodeBase64(nacl.randomBytes(nacl.box.nonceLength)),
-      sender: 'me',
+      sender: "me",
       timestamp: new Date().toISOString(),
       read: false,
       isAttachment: true,
     };
-    setMessages(prev => [...prev, newMessage]);
+    setMessages((prev) => [...prev, newMessage]);
   };
 
   const decrypt = (msg) => {
-    if (!keyPair) return '';
+    if (!keyPair) return "";
     const nonce = naclUtil.decodeBase64(msg.nonce);
-    const decrypted = decryptMessage(msg.encryptedMessage, nonce, peerPublicKey, keyPair.secretKey);
-    return decrypted || '[Unable to decrypt]';
+    const decrypted = decryptMessage(
+      msg.encryptedMessage,
+      nonce,
+      peerPublicKey,
+      keyPair.secretKey
+    );
+    return decrypted || "[Unable to decrypt]";
   };
 
   const handleInputChange = (e) => {
@@ -97,17 +112,25 @@ const Chat = () => {
   return (
     <div className="max-w-md mx-auto p-4 border rounded shadow h-96 flex flex-col">
       <div className="flex-grow overflow-auto mb-4">
-        {messages.map(msg => (
-          <div key={msg.id} className={`mb-2 ${msg.sender === 'me' ? 'text-right' : 'text-left'}`}>
+        {messages.map((msg) => (
+          <div
+            key={msg.id}
+            className={`mb-2 ${
+              msg.sender === "me" ? "text-right" : "text-left"
+            }`}>
             <div className="inline-block bg-primary text-white rounded px-3 py-1">
               {decrypt(msg)}
-              {msg.sender === 'me' && (
+              {msg.sender === "me" && (
                 <span className="ml-2 text-xs">
-                  <FaCheckDouble className={msg.read ? 'text-blue-300' : 'text-gray-300'} />
+                  <FaCheckDouble
+                    className={msg.read ? "text-blue-300" : "text-gray-300"}
+                  />
                 </span>
               )}
             </div>
-            <div className="text-xs text-text">{new Date(msg.timestamp).toLocaleTimeString()}</div>
+            <div className="text-xs text-text">
+              {new Date(msg.timestamp).toLocaleTimeString()}
+            </div>
           </div>
         ))}
         <div ref={messagesEndRef} />
@@ -116,8 +139,7 @@ const Chat = () => {
         <button
           onClick={handleFileAttach}
           className="bg-gray-300 text-gray-800 px-4 py-2 rounded-l hover:bg-gray-400"
-          title="Attach File"
-        >
+          title="Attach File">
           <FaPaperclip />
         </button>
         <input
@@ -129,8 +151,7 @@ const Chat = () => {
         />
         <button
           onClick={handleSend}
-          className="bg-primary text-white px-4 py-2 rounded-r hover:bg-secondary"
-        >
+          className="bg-primary text-white px-4 py-2 rounded-r hover:bg-secondary">
           Send
         </button>
       </div>

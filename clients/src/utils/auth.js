@@ -56,6 +56,10 @@ export const logout = () => {
   localStorage.removeItem('token');
 };
 
+export const isAuthenticated = () => {
+  return !!getCurrentUser();
+};
+
 export const getCurrentUser = () => {
   const token = localStorage.getItem('token');
   if (!token) return null;
