@@ -31,8 +31,8 @@ const RoommateMatches = lazy(() => import('./pages/tenants/RoommateMatches'));
 const Wishlist = lazy(() => import('./pages/Wishlist'));
 const SharedWishlist = lazy(() => import('./pages/SharedWishlist'));
 const HelpCenter = lazy(() => import('./pages/HelpCenter'));
-const ForumList = lazy(() => import('./pages/forum/ForumList'));
-const ForumPostDetail = lazy(() => import('./pages/forum/ForumPostDetail'));
+const ForumList = lazy(() => import('./pages/ForumList'));
+const ForumPostDetail = lazy(() => import('./pages/ForumPostDetail'));
 
 function App() {
   const [runTour, setRunTour] = useState(false);
