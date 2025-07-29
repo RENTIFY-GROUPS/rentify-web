@@ -36,9 +36,9 @@ Rentify is a full-stack web application designed to facilitate property rentals,
 - Backend: Node.js, Express, MongoDB (via Mongoose)
 - Authentication: JWT-based auth middleware
 - File Uploads: Cloudinary integration
-- Payment Processing: Payment routes (likely integrated with payment gateways)
+- Payment Processing: Payment routes
 - Messaging: Real-time chat components and conversation models
-- Other: Email and SMS utilities for notifications
+- Email and SMS utilities for notifications
 
 ---
 
@@ -48,9 +48,9 @@ Rentify is a full-stack web application designed to facilitate property rentals,
 
 - Node.js (v14 or higher recommended)
 - npm or yarn
-- MongoDB instance (local or cloud)
+- MongoDB instance (Cloud/Atlas)
 - Cloudinary account (for image uploads)
-- Payment gateway credentials (if applicable)
+- Payment gateway credentials
 
 ---
 
@@ -123,9 +123,5 @@ Contributions are welcome! Please follow these steps:
 4. Push your branch and open a pull request.
 
 ---
-
-## License
-
-Alot of people will try to take advantage of the fact that i don't have a
-
+---
 ---
